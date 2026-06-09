@@ -127,7 +127,7 @@
             overflow: hidden; box-shadow: var(--shadow-sm);
             transition: transform 0.3s, box-shadow 0.3s;
             cursor: pointer;
-            animation: fadeInUp 0.5s ease both;
+
         }
         .product-card:hover {
             transform: translateY(-4px);
@@ -213,6 +213,54 @@
         @media (max-width: 480px) {
             .footer-inner { grid-template-columns: 1fr; gap: 24px; }
         }
+
+        
+        body { opacity: 0; transition: opacity 0.32s ease; }
+        body.pg-in { opacity: 1; }
+
+        
+        @keyframes shimmer {
+            0%   { background-position: -600px 0; }
+            100% { background-position:  600px 0; }
+        }
+        .skel {
+            background: linear-gradient(90deg,#e2e8f0 25%,#f1f5f9 50%,#e2e8f0 75%);
+            background-size: 1200px 100%;
+            animation: shimmer 1.4s infinite linear;
+            border-radius: 8px;
+        }
+        .skel-card {
+            background: var(--bg-white);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+        .skel-img  { width:100%; aspect-ratio:1/1; border-radius:0; }
+        .skel-body { padding:14px 16px 16px; }
+        .skel-line { height:10px; margin-bottom:9px; border-radius:5px; }
+        .skel-xs   { width:35%; }
+        .skel-sm   { width:55%; }
+        .skel-md   { width:75%; }
+        .skel-lg   { width:90%; }
+        .skel-price{ height:16px; width:42%; margin-bottom:10px; border-radius:5px; }
+        .skel-btn  { height:34px; width:100%; border-radius:8px; }
+
+        
+        .product-card {
+            opacity: 0;
+            transform: translateY(22px);
+            transition: opacity 0.42s ease, transform 0.42s ease,
+                        box-shadow 0.3s, transform 0.3s;
+        }
+        .product-card.on {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .product-card.on:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
     </style>
 </head>
 <body>
@@ -308,56 +356,124 @@
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
     const supabase = createClient("https://kjaaoryyltemwsknhswm.supabase.co", "sb_publishable_djzazyfgAB5aqRC6J5N9Kg_XDskw04Y");
 
+    
+    requestAnimationFrame(function() {
+        requestAnimationFrame(function() { document.body.classList.add("pg-in"); });
+    });
+
+    
+    document.addEventListener("click", function(e) {
+        var a = e.target.closest("a[href]");
+        if (!a) return;
+        var h = a.getAttribute("href");
+        if (!h || h.charAt(0) === "#" || h.indexOf("://") !== -1 || h.indexOf("mailto") === 0 || h.indexOf("tel") === 0 || h.indexOf("wa.me") !== -1) return;
+        e.preventDefault();
+        document.body.classList.remove("pg-in");
+        var dest = h;
+        setTimeout(function() { window.location.href = dest; }, 300);
+    });
+
+    
+    var cardObs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(en) {
+            if (!en.isIntersecting) return;
+            en.target.classList.add("on");
+            cardObs.unobserve(en.target);
+        });
+    }, { threshold: 0.08, rootMargin: "0px 0px -40px 0px" });
+
+    
+    function makeSkelCard() {
+        return "<div class=\"skel-card\">"
+            + "<div class=\"skel skel-img\"></div>"
+            + "<div class=\"skel-body\">"
+            + "<div class=\"skel skel-line skel-xs\"></div>"
+            + "<div class=\"skel skel-line skel-md\"></div>"
+            + "<div class=\"skel skel-line skel-lg\"></div>"
+            + "<div class=\"skel skel-price\"></div>"
+            + "<div class=\"skel skel-btn\"></div>"
+            + "</div></div>";
+    }
+
+    var grid = document.getElementById("productGrid");
+
+    
+    var skelHTML = "";
+    for (var s = 0; s < 8; s++) skelHTML += makeSkelCard();
+    grid.innerHTML = skelHTML;
+
+    
+    var currentFilter = "all";
+
+    
     function renderProducts(list) {
-        var grid = document.getElementById('productGrid');
         if (!list.length) {
-            grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text-muted)"><svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="margin:0 auto 16px;display:block;opacity:0.4"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M8 2v4M16 2v4M6 12h12"/></svg><p style="font-size:1rem;font-weight:600;margin-bottom:6px">No hay productos disponibles</p><p style="font-size:0.85rem">Los productos se cargar&aacute;n desde la base de datos.</p></div>';
+            grid.innerHTML = "<div style=\"grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text-muted)\">"
+                + "<p style=\"font-size:1rem;font-weight:600;margin-bottom:6px\">No hay productos disponibles</p>"
+                + "<p style=\"font-size:0.85rem\">Los productos se cargar&aacute;n desde la base de datos.</p></div>";
             return;
         }
-        grid.innerHTML = list.map(function(p, i) {
-            var priceHtml = '$' + p.price;
-            var imgHtml = p.image ? '<img src="' + p.image + '" alt="' + p.name + '" style="width:100%;height:100%;object-fit:cover;display:block">' : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M8 2v4M16 2v4M6 12h12"/><rect x="8" y="14" width="3" height="3" rx="0.5"/><rect x="13" y="14" width="3" height="3" rx="0.5"/></svg>';
-            return '<div class="product-card" data-category="' + p.category + '" data-slug="' + p.id + '" style="animation-delay:' + (0.05 * (i + 1)) + 's">' +
-                '<div class="product-image">' + imgHtml + '</div>' +
-                '<div class="product-info">' +
-                '<h4>' + p.name + '</h4>' +
-                '<div class="product-details">' + (p.description || '') + '</div>' +
-                '<div class="product-price">' + priceHtml + '</div>' +
-                '<span class="product-detail-link">Ver m&aacute;s detalles</span>' +
-                '<button class="product-btn" onclick="event.stopPropagation();window.open(\'https://wa.me/584243532288?text=Hola,%20me%20interesa%20' + encodeURIComponent(p.name) + '\',\'_blank\')">Consultar</button>' +
-                '</div></div>';
-        }).join('');
+        grid.innerHTML = "";
+        var fragment = document.createDocumentFragment();
+        list.forEach(function(p) {
+            var card = document.createElement("div");
+            card.className = "product-card";
+            card.setAttribute("data-category", p.category || "");
+            card.setAttribute("data-slug", p.id || "");
+            var imgHtml = p.image
+                ? "<img src=\"" + p.image + "\" alt=\"" + p.name + "\" loading=\"lazy\" style=\"width:100%;height:100%;object-fit:cover;display:block\">"
+                : "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"2\" y=\"4\" width=\"20\" height=\"16\" rx=\"2\"/><path d=\"M8 2v4M16 2v4M6 12h12\"/></svg>";
+            card.innerHTML =
+                "<div class=\"product-image\">" + imgHtml + "</div>"
+                + "<div class=\"product-info\">"
+                + "<span class=\"category-tag\">" + (p.category || "") + "</span>"
+                + "<h4>" + p.name + "</h4>"
+                + "<div class=\"product-details\">" + (p.description || "") + "</div>"
+                + "<div class=\"product-price\">$" + p.price + "</div>"
+                + "<span class=\"product-detail-link\">Ver m&aacute;s detalles</span>"
+                + "<button class=\"product-btn\">Consultar</button>"
+                + "</div>";
+            
+            var pname = p.name;
+            card.querySelector(".product-btn").addEventListener("click", function(ev) {
+                ev.stopPropagation();
+                window.open("https://wa.me/584243532288?text=Hola,%20me%20interesa%20" + encodeURIComponent(pname), "_blank");
+            });
+            
+            var slug = p.id;
+            card.addEventListener("click", function(ev) {
+                if (ev.target.classList.contains("product-btn")) return;
+                document.body.classList.remove("pg-in");
+                setTimeout(function() { window.location.href = "detalle.html?id=" + slug; }, 300);
+            });
+            fragment.appendChild(card);
+            cardObs.observe(card);
+        });
+        grid.appendChild(fragment);
         attachFilters();
     }
 
+    
     function attachFilters() {
-        var buttons = document.querySelectorAll('.filter-btn');
-        var cards = document.querySelectorAll('.product-card');
+        var buttons = document.querySelectorAll(".filter-btn");
         buttons.forEach(function(btn) {
             btn.onclick = function() {
-                buttons.forEach(function(b) { b.classList.remove('active'); });
-                btn.classList.add('active');
-                var filter = btn.getAttribute('data-filter');
-                cards.forEach(function(card) {
-                    card.style.display = (filter === 'all' || card.getAttribute('data-category') === filter) ? '' : 'none';
+                buttons.forEach(function(b) { b.classList.remove("active"); });
+                btn.classList.add("active");
+                currentFilter = btn.getAttribute("data-filter");
+                document.querySelectorAll(".product-card").forEach(function(card) {
+                    card.style.display = (currentFilter === "all" || card.getAttribute("data-category") === currentFilter) ? "" : "none";
                 });
             };
         });
     }
 
-    document.getElementById('productGrid').addEventListener('click', function(e) {
-        var card = e.target.closest('.product-card');
-        if (!card) return;
-        if (e.target.classList.contains('product-btn')) return;
-        var name = card.querySelector('h4').textContent;
-        var slug = card.getAttribute('data-slug') || name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-        window.location.href = 'detalle.html?id=' + slug;
-    });
-
-    supabase.from('productos').select('*').then(function(resp) {
+    
+    supabase.from("productos").select("*").then(function(resp) {
         if (resp.error) { console.error(resp.error); renderProducts([]); return; }
         renderProducts(resp.data || []);
     });
+
 </script>
 </body>
 </html>
