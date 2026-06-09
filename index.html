@@ -335,16 +335,7 @@
             .contact-card { padding: 20px 24px; min-width: 160px; width: 100%; max-width: 300px; }
         }
 
-        /* ===== CARRUSEL ===== */
-        .carousel-wrap {
-            max-width: 780px; margin: 0 auto; padding: 88px 24px 0;
-            min-height: 100px;
-        }
-        @media (max-width: 768px) {
-            .carousel-wrap { padding: 72px 16px 0; }
-        }
-
-        /* ===== OFERTAS ===== */
+        
         .offers-scroll-wrap {
             position: relative;
         }
@@ -429,6 +420,84 @@
             .offer-info h4 { font-size: 0.75rem; }
             .offer-new-price { font-size: 0.85rem; }
         }
+    
+        
+        .carousel-wrap { max-width: 780px; margin: 0 auto; padding: 88px 24px 0; }
+        @media (max-width: 768px) { .carousel-wrap { padding: 72px 16px 0; } }
+        .carousel-slider {
+            position: relative; width: 100%;
+            border-radius: 14px; overflow: hidden;
+            aspect-ratio: 16 / 7;
+            background: linear-gradient(135deg, #030b1a, #0c1836);
+            box-shadow: 0 8px 32px rgba(3,11,26,0.22);
+        }
+        .carousel-slide {
+            position: absolute; inset: 0; opacity: 0;
+            transition: opacity 0.6s ease;
+            cursor: pointer;
+        }
+        .carousel-slide.active { opacity: 1; }
+        .carousel-slide img { width: 100%; height: 100%; display: block; object-fit: cover; }
+        .carousel-dots {
+            position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 6px; z-index: 5;
+        }
+        .carousel-dot {
+            width: 7px; height: 7px; border-radius: 50%;
+            background: rgba(255,255,255,0.35); border: none; cursor: pointer;
+            transition: all 0.2s; padding: 0;
+        }
+        .carousel-dot.active { background: white; width: 20px; border-radius: 4px; }
+        .carousel-arrow {
+            position: absolute; top: 50%; transform: translateY(-50%); z-index: 5;
+            width: 36px; height: 36px; border-radius: 50%; border: none; cursor: pointer;
+            background: rgba(0,0,0,0.35); backdrop-filter: blur(6px);
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s; opacity: 0;
+        }
+        .carousel-slider:hover .carousel-arrow { opacity: 1; }
+        .carousel-arrow:hover { background: rgba(0,0,0,0.55); }
+        .carousel-arrow svg { width: 18px; height: 18px; stroke: white; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+        .carousel-arrow-left { left: 12px; }
+        .carousel-arrow-right { right: 12px; }
+
+    
+        
+        body { opacity: 0; transition: opacity 0.32s ease; }
+        body.pg-in { opacity: 1; }
+
+        
+        @keyframes shimmer {
+            0%   { background-position: -600px 0; }
+            100% { background-position:  600px 0; }
+        }
+        .skel {
+            background: linear-gradient(90deg,#e2e8f0 25%,#f1f5f9 50%,#e2e8f0 75%);
+            background-size: 1200px 100%;
+            animation: shimmer 1.4s infinite linear;
+            border-radius: 8px;
+        }
+        .skel-banner { width:100%; aspect-ratio:16/7; border-radius:14px; }
+        .skel-offer  { flex:0 0 260px; border-radius:16px; overflow:hidden; border:1px solid #e2e8f0; }
+        .skel-offer-img  { width:100%; aspect-ratio:1/1; }
+        .skel-offer-body { padding:14px 16px; }
+        .skel-line  { height:10px; margin-bottom:9px; border-radius:5px; }
+        .skel-short { width:50%; }
+        .skel-mid   { width:72%; }
+        .skel-long  { width:90%; }
+        .skel-price { height:14px; width:44%; margin-bottom:10px; border-radius:5px; }
+        .skel-btn   { height:34px; width:100%; border-radius:8px; }
+        @media (max-width:768px) { .skel-offer { flex:0 0 210px; } }
+        @media (max-width:400px) { .skel-offer { flex:0 0 180px; } }
+
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(26px);
+            transition: opacity 0.48s ease, transform 0.48s ease;
+        }
+        .reveal.on { opacity:1; transform:translateY(0); }
+
     </style>
 </head>
 <body>
@@ -470,8 +539,19 @@
         </div>
     </nav>
 
-    <!-- ===== CARRUSEL (cargado desde BD) ===== -->
-    <div class="carousel-wrap" id="carouselWrap"></div>
+    
+    <div class="carousel-wrap">
+        <div class="carousel-slider" id="carouselSlider">
+            <div class="skel skel-banner" id="bnrSkel" style="position:absolute;inset:0;z-index:1;border-radius:0"></div>
+            <button class="carousel-arrow carousel-arrow-left" id="carouselPrev">
+                <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <button class="carousel-arrow carousel-arrow-right" id="carouselNext">
+                <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+            <div class="carousel-dots" id="carouselDots"></div>
+        </div>
+    </div>
 
     <section class="section" id="categorias">
         <div class="section-header">
@@ -479,7 +559,7 @@
             <p>Todo lo que necesitas para tu hogar en un solo lugar, con la mejor calidad y los mejores precios.</p>
         </div>
         <div class="categories-grid">
-            <div class="category-card">
+            <div class="category-card reveal">
                 <div class="category-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="2" y="2" width="20" height="20" rx="2"/>
@@ -498,7 +578,7 @@
                 <h3>Electrodomesticos</h3>
                 <p>Neveras, cocinas, lavadoras, aires acondicionados y mas electrodomesticos para tu hogar.</p>
             </div>
-            <div class="category-card">
+            <div class="category-card reveal">
                 <div class="category-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -507,7 +587,7 @@
                 <h3>Repuestos de Refrigeracion</h3>
                 <p>Compresores, termostatos, ventiladores y todo tipo de repuestos para refrigeracion.</p>
             </div>
-            <div class="category-card">
+            <div class="category-card reveal">
                 <div class="category-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="5" y="3" width="14" height="6" rx="1"/>
@@ -522,7 +602,7 @@
                 <h3>Plasticos</h3>
                 <p>Muebles, sillas, mesas, cestas y una amplia variedad de articulos plasticos para el hogar.</p>
             </div>
-            <div class="category-card">
+            <div class="category-card reveal">
                 <div class="category-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="3" y="4" width="4" height="16" rx="1"/>
@@ -547,7 +627,7 @@
         </div>
         <div class="offers-scroll-wrap">
             <button class="offers-arrow offers-arrow-left" id="offersArrowLeft"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
-            <div class="offers-scroll" id="offersScroll"></div>
+            <div class="offers-scroll" id="offersScroll"><div class="skel-offer"><div class="skel skel-offer-img"></div><div class="skel-offer-body"><div class="skel skel-line skel-mid"></div><div class="skel skel-line skel-long"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div><div class="skel-offer"><div class="skel skel-offer-img"></div><div class="skel-offer-body"><div class="skel skel-line skel-mid"></div><div class="skel skel-line skel-long"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div><div class="skel-offer"><div class="skel skel-offer-img"></div><div class="skel-offer-body"><div class="skel skel-line skel-mid"></div><div class="skel skel-line skel-long"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div><div class="skel-offer"><div class="skel skel-offer-img"></div><div class="skel-offer-body"><div class="skel skel-line skel-mid"></div><div class="skel skel-line skel-long"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div></div>
             <button class="offers-arrow offers-arrow-right" id="offersArrowRight"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
         </div>
         <div style="text-align:center;margin-top:32px">
@@ -674,33 +754,145 @@
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
     const supabase = createClient("https://kjaaoryyltemwsknhswm.supabase.co", "sb_publishable_djzazyfgAB5aqRC6J5N9Kg_XDskw04Y");
 
-    function renderOffers(list) {
-        var container = document.getElementById('offersScroll');
-        if (!list.length) {
-            container.innerHTML = '<div style="flex:0 0 100%;text-align:center;padding:40px 20px;color:var(--text-muted)"><p style="font-size:0.95rem">No hay ofertas disponibles por el momento.</p></div>';
-            return;
-        }
-        container.innerHTML = list.map(function(p) {
-            var slug = p.product_id || p.name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-            return '<div class="offer-card" onclick="window.location.href=\'detalle.html?id=' + slug + '\'">' +
-                '<div class="offer-image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M12 8v8M8 12h8"/></svg></div>' +
-                '<div class="offer-info">' +
-                '<h4>' + (p.product_name || p.name || '') + '</h4>' +
-                '<div class="offer-prices"><span class="offer-old-price">$' + (p.original_price || p.price || 0) + '</span><span class="offer-new-price">$' + (p.sale_price || p.sale || 0) + '</span></div>' +
-                '<span class="offer-detail-link" style="display:block;margin-bottom:10px">Ver m&aacute;s detalles</span>' +
-                '<button class="offer-btn" onclick="event.stopPropagation();window.open(\'https://wa.me/584243532288?text=Hola,%20me%20interesa%20' + encodeURIComponent(p.product_name || p.name || '') + '%20en%20oferta\',\'_blank\')">Consultar Oferta</button>' +
-                '</div></div>';
-        }).join('');
-    }
-
-    supabase.from('ofertas').select('*').then(function(resp) {
-        if (!resp.error) renderOffers(resp.data || []);
-        else renderOffers([]);
+    
+    requestAnimationFrame(function() {
+        requestAnimationFrame(function() { document.body.classList.add("pg-in"); });
     });
 
-    var scrollEl = document.getElementById('offersScroll');
-    document.getElementById('offersArrowLeft').addEventListener('click', function() { scrollEl.scrollBy({ left: -300, behavior: 'smooth' }); });
-    document.getElementById('offersArrowRight').addEventListener('click', function() { scrollEl.scrollBy({ left: 300, behavior: 'smooth' }); });
+    
+    document.addEventListener("click", function(e) {
+        var a = e.target.closest("a[href]");
+        if (!a) return;
+        var h = a.getAttribute("href");
+        if (!h || h.charAt(0) === "#" || h.indexOf("://") !== -1 || h.indexOf("mailto") === 0 || h.indexOf("tel") === 0 || h.indexOf("wa.me") !== -1) return;
+        e.preventDefault();
+        document.body.classList.remove("pg-in");
+        var dest = h;
+        setTimeout(function() { window.location.href = dest; }, 300);
+    });
+
+    
+    var obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(en) {
+            if (!en.isIntersecting) return;
+            var el = en.target;
+            var peers = Array.from(el.parentElement.querySelectorAll(".reveal"));
+            var i = peers.indexOf(el);
+            setTimeout(function() { el.classList.add("on"); }, i * 110);
+            obs.unobserve(el);
+        });
+    }, { threshold: 0.1 });
+    document.querySelectorAll(".reveal").forEach(function(el) { obs.observe(el); });
+
+    
+    supabase.from("banners").select("*").order("order").then(function(resp) {
+        var skel = document.getElementById("bnrSkel");
+        var banners = (resp.data || []).filter(function(b) { return b.image; });
+        if (!banners.length) {
+            document.querySelector(".carousel-wrap").style.display = "none";
+            return;
+        }
+        if (skel) { skel.style.opacity = "0"; setTimeout(function() { skel.remove(); }, 400); }
+        var slider   = document.getElementById("carouselSlider");
+        var dotsWrap = document.getElementById("carouselDots");
+        var current  = 0;
+        banners.forEach(function(b, i) {
+            var slide = document.createElement("div");
+            slide.className = "carousel-slide" + (i === 0 ? " active" : "");
+            var img = document.createElement("img");
+            img.src = b.image; img.alt = "Banner";
+            img.style.cssText = "width:100%;height:100%;display:block;object-fit:" + (b.fit || "cover");
+            slide.appendChild(img);
+            if (b.link) {
+                slide.style.cursor = "pointer";
+                var lnk = b.link;
+                slide.addEventListener("click", function() {
+                    document.body.classList.remove("pg-in");
+                    setTimeout(function() { window.location.href = lnk; }, 300);
+                });
+            }
+            slider.insertBefore(slide, document.getElementById("carouselPrev"));
+            var dot = document.createElement("button");
+            dot.className = "carousel-dot" + (i === 0 ? " active" : "");
+            dot.addEventListener("click", (function(idx) { return function() { goTo(idx); }; })(i));
+            dotsWrap.appendChild(dot);
+        });
+        function goTo(n) {
+            var slides = slider.querySelectorAll(".carousel-slide");
+            var dots   = dotsWrap.querySelectorAll(".carousel-dot");
+            slides[current].classList.remove("active"); dots[current].classList.remove("active");
+            current = (n + banners.length) % banners.length;
+            slides[current].classList.add("active"); dots[current].classList.add("active");
+        }
+        document.getElementById("carouselPrev").addEventListener("click", function() { goTo(current - 1); });
+        document.getElementById("carouselNext").addEventListener("click", function() { goTo(current + 1); });
+        setInterval(function() { goTo(current + 1); }, 4000);
+    });
+
+    
+    var offersLoaded = false;
+    function loadOffers() {
+        if (offersLoaded) return;
+        offersLoaded = true;
+        supabase.from("ofertas").select("*").then(function(resp) {
+            var list = (!resp.error && resp.data) ? resp.data : [];
+            var container = document.getElementById("offersScroll");
+            if (!list.length) {
+                container.innerHTML = "<div style=\"flex:0 0 100%;text-align:center;padding:40px 20px;color:var(--text-muted)\"><p style=\"font-size:0.95rem\">No hay ofertas disponibles.</p></div>";
+                return;
+            }
+            container.innerHTML = "";
+            list.forEach(function(p, i) {
+                var slug = p.product_id || (p.product_name || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+                var card = document.createElement("div");
+                card.className = "offer-card reveal";
+                card.style.cssText = "opacity:0;transform:translateY(26px);transition:opacity 0.48s ease,transform 0.48s ease";
+                var imgHtml = p.image
+                    ? ("<img src=\"" + p.image + "\" loading=\"lazy\" style=\"width:100%;height:100%;object-fit:cover;display:block\" alt=\"\">")
+                    : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M12 8v8M8 12h8"/></svg>';
+                card.innerHTML =
+                    "<div class=\"offer-image\">" + imgHtml + "</div>" +
+                    "<div class=\"offer-info\">" +
+                    "<h4>" + (p.product_name || "") + "</h4>" +
+                    "<div class=\"offer-prices\">" +
+                    "<span class=\"offer-old-price\">$" + (p.original_price || 0) + "</span>" +
+                    "<span class=\"offer-new-price\">$" + (p.sale_price || 0) + "</span>" +
+                    "</div>" +
+                    "<span class=\"offer-detail-link\" style=\"display:block;margin-bottom:10px\">Ver m&aacute;s detalles</span>" +
+                    "<button class=\"offer-btn\">Consultar Oferta</button>" +
+                    "</div>";
+                card.querySelector(".offer-card, .offer-image").addEventListener
+                    || card.addEventListener("click", (function(s) { return function() { window.location.href = "detalle.html?id=" + s; }; })(slug));
+                card.addEventListener("click", (function(s) { return function() {
+                    document.body.classList.remove("pg-in");
+                    setTimeout(function() { window.location.href = "detalle.html?id=" + s; }, 300);
+                }; })(slug));
+                var waBtn = card.querySelector(".offer-btn");
+                var pname = p.product_name || "";
+                waBtn.addEventListener("click", function(ev) {
+                    ev.stopPropagation();
+                    window.open("https://wa.me/584243532288?text=Hola,%20me%20interesa%20" + encodeURIComponent(pname) + "%20en%20oferta", "_blank");
+                });
+                container.appendChild(card);
+                setTimeout(function(el) { return function() { el.style.opacity = "1"; el.style.transform = "translateY(0)"; }; }(card), 80 + i * 100);
+            });
+        });
+    }
+
+    var offerSection = document.getElementById("ofertas");
+    var lazyObs = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting) { loadOffers(); lazyObs.disconnect(); }
+    }, { rootMargin: "200px" });
+    lazyObs.observe(offerSection);
+
+    
+    document.getElementById("offersArrowLeft").addEventListener("click", function() {
+        document.getElementById("offersScroll").scrollBy({ left: -300, behavior: "smooth" });
+    });
+    document.getElementById("offersArrowRight").addEventListener("click", function() {
+        document.getElementById("offersScroll").scrollBy({ left: 300, behavior: "smooth" });
+    });
+
 </script>
 </body>
 </html>
