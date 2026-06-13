@@ -60,7 +60,7 @@
             display: flex; align-items: center;
         }
 
-        /* Barra de búsqueda inline */
+    
         .nav-search-wrap {
             flex: 1; display: flex; align-items: center;
             background: white; border: 1.5px solid #e2e8f0;
@@ -96,7 +96,7 @@
         .nav-search-btn:hover { background: var(--blue-800); }
         .nav-search-btn svg { width: 17px; height: 17px; stroke: white; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 
-        /* Resultados debajo de la barra */
+        
         .search-modal-results {
             position: absolute; top: calc(100% + 8px); left: 0; right: 0;
             background: white; border-radius: 14px; overflow: hidden;
@@ -383,7 +383,7 @@
             .contact-card { padding: 20px 24px; min-width: 160px; width: 100%; max-width: 300px; }
         }
 
-        /* ===== OFERTAS ===== */
+        
         .offers-scroll-wrap {
             position: relative;
         }
@@ -410,7 +410,7 @@
         .offers-arrow-left { left: -12px; }
         .offers-arrow-right { right: -12px; }
 
-        /* CSS updates for Offer Card */
+        
         .offer-card {
             background: #ffffff; border-radius: 12px;
             overflow: hidden; border: 1px solid #e5e7eb;
@@ -479,7 +479,7 @@
             .offer-countdown { font-size: 0.58rem; }
         }
     
-        /* ===== CAROUSEL BANNERS ===== */
+        
         .carousel-wrap { max-width: 780px; margin: 0 auto; padding: 88px 24px 0; }
         @media (max-width: 768px) { .carousel-wrap { padding: 72px 16px 0; } }
         .carousel-slider {
@@ -520,11 +520,11 @@
         .carousel-arrow-right { right: 12px; }
 
     
-        /* ─── PAGE TRANSITION ─── */
+        
         body { opacity: 0; transition: opacity 0.32s ease; }
         body.pg-in { opacity: 1; }
 
-        /* ─── SHIMMER SKELETON ─── */
+        
         @keyframes shimmer {
             0%   { background-position: -600px 0; }
             100% { background-position:  600px 0; }
@@ -547,7 +547,7 @@
         @media (max-width:768px) { .skel-offer { flex:0 0 200px; } .skel-offer-img { height: 130px; } }
         @media (max-width:400px) { .skel-offer { flex:0 0 170px; } .skel-offer-img { height: 110px; } }
 
-        /* ─── REVEAL ON SCROLL ─── */
+        
         .reveal {
             opacity: 0;
             transform: translateY(26px);
@@ -555,7 +555,7 @@
         }
         .reveal.on { opacity:1; transform:translateY(0); }
 
-        /* ════ SEARCH (inline nav) ════ */
+        
 
     </style>
 </head>
@@ -791,13 +791,13 @@
     const supabase = createClient("https://kjaaoryyltemwsknhswm.supabase.co", "sb_publishable_djzazyfgAB5aqRC6J5N9Kg_XDskw04Y");
 
 
-    /* ════ GLOBAL SEARCH INLINE ════ */
+    
     var smInput   = document.getElementById("smInput");
     var smResults = document.getElementById("smResults");
     var smTimer   = null;
     var smCache   = [];
 
-    /* Preload product list silently */
+    
     supabase.from("productos").select("id,name,category,price,image").then(function(r) {
         if (!r.error) smCache = r.data || [];
     });
@@ -853,7 +853,7 @@
 
             var name = document.createElement("div");
             name.className = "sm-name";
-            /* highlight matching text */
+            
             var ql = q.toLowerCase();
             var nl = p.name.toLowerCase();
             var idx = nl.indexOf(ql);
@@ -906,7 +906,7 @@
         }, 160);
     });
 
-    /* keyboard navigation in results */
+    
     smInput.addEventListener("keydown", function(e) {
         var rows = Array.from(smResults.querySelectorAll(".sm-result"));
         if (!rows.length) return;
@@ -925,12 +925,12 @@
         }
     });
 
-    /* ─── PAGE FADE IN ─── */
+    
     requestAnimationFrame(function() {
         requestAnimationFrame(function() { document.body.classList.add("pg-in"); });
     });
 
-    /* ─── PAGE FADE OUT on link click ─── */
+    
     document.addEventListener("click", function(e) {
         var a = e.target.closest("a[href]");
         if (!a) return;
@@ -942,7 +942,7 @@
         setTimeout(function() { window.location.href = dest; }, 300);
     });
 
-    /* ─── INTERSECTION OBSERVER for .reveal ─── */
+    
     var obs = new IntersectionObserver(function(entries) {
         entries.forEach(function(en) {
             if (!en.isIntersecting) return;
@@ -955,7 +955,7 @@
     }, { threshold: 0.1 });
     document.querySelectorAll(".reveal").forEach(function(el) { obs.observe(el); });
 
-    /* ─── CAROUSEL BANNERS ─── */
+    
     supabase.from("banners").select("*").order("order").then(function(resp) {
         var skel = document.getElementById("bnrSkel");
         var banners = (resp.data || []).filter(function(b) { return b.image; });
@@ -1000,7 +1000,7 @@
         setInterval(function() { goTo(current + 1); }, 4000);
     });
 
-    /* ─── OFERTAS: lazy load when section enters viewport ─── */
+    
     var offersLoaded = false;
     function loadOffers() {
         if (offersLoaded) return;
@@ -1021,7 +1021,7 @@
                 var card = document.createElement("div");
                 card.className = "offer-card reveal";
                 
-                /* Sincronización de la imagen mediante búsqueda en smCache */
+                
                 var matchingProd = smCache.find(function(item) { return item.id === p.product_id; });
                 var productImg = (matchingProd && matchingProd.image) ? matchingProd.image : p.image;
 
@@ -1064,7 +1064,7 @@
                 setTimeout(function(el) { return function() { el.style.opacity = "1"; el.style.transform = "translateY(0)"; }; }(card), 80 + i * 100);
             });
 
-            /* Lógica de los temporizadores regresivos */
+            
             function updateTimers() {
                 container.querySelectorAll(".offer-countdown").forEach(function(el) {
                     if (el.classList.contains("expired")) return; 
@@ -1101,7 +1101,7 @@
     }, { rootMargin: "200px" });
     lazyObs.observe(offerSection);
 
-    /* ─── OFFER SCROLL ARROWS ─── */
+    
     document.getElementById("offersArrowLeft").addEventListener("click", function() {
         document.getElementById("offersScroll").scrollBy({ left: -300, behavior: "smooth" });
     });
