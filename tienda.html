@@ -123,7 +123,7 @@
             gap: 20px;
         }
 
-        /* ===== NUEVOS ESTILOS DE TARJETAS (ESTILO OFERTA/CUADRADOS) ===== */
+        
         .product-card {
             background: #ffffff;
             border-radius: 8px;
@@ -222,7 +222,7 @@
         }
         
         .product-price-container .new-price {
-            color: #dc2626; /* Color rojo solo si es precio de oferta */
+            color: #dc2626; 
         }
 
         .offer-countdown {
@@ -277,11 +277,11 @@
             .footer-inner { grid-template-columns: 1fr; gap: 24px; }
         }
 
-        /* ─── PAGE TRANSITION ─── */
+        
         body { opacity: 0; transition: opacity 0.32s ease; }
         body.pg-in { opacity: 1; }
 
-        /* ─── SHIMMER SKELETON ─── */
+        
         @keyframes shimmer {
             0%   { background-position: -600px 0; }
             100% { background-position:  600px 0; }
@@ -310,7 +310,7 @@
         .skel-price{ height:16px; width:42%; margin-top:auto; border-radius:5px; }
         @media (max-width: 700px) { .skel-img { height: 160px; } }
 
-        /* ─── REVEAL ON SCROLL ─── */
+        
         .product-card {
             opacity: 0;
             transform: translateY(22px);
@@ -318,7 +318,7 @@
                         box-shadow 0.3s, transform 0.3s;
         }
 
-        /* ════ SEARCH MODAL ════ */
+        
         .search-modal-overlay {
             position: fixed; inset: 0; z-index: 9999;
             background: rgba(10,15,30,0.72);
@@ -522,7 +522,7 @@
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
     const supabase = createClient("https://kjaaoryyltemwsknhswm.supabase.co", "sb_publishable_djzazyfgAB5aqRC6J5N9Kg_XDskw04Y");
 
-    /* ════ GLOBAL SEARCH MODAL ════ */
+    
     var smOverlay = document.getElementById("smOverlay");
     var smInput   = document.getElementById("smInput");
     var smResults = document.getElementById("smResults");
@@ -592,7 +592,7 @@
 
             var name = document.createElement("div");
             name.className = "sm-name";
-            /* highlight matching text */
+            
             var ql = q.toLowerCase();
             var nl = p.name.toLowerCase();
             var idx = nl.indexOf(ql);
@@ -620,7 +620,7 @@
             smResults.appendChild(row);
         });
 
-        /* hint bar */
+        
         var hint = document.createElement("div");
         hint.className = "sm-hint";
         hint.innerHTML = "<span>↑↓ navegar</span><span>⏎ abrir</span><span>Esc cerrar</span>";
@@ -645,7 +645,7 @@
         }, 160);
     });
 
-    /* keyboard navigation in results */
+    
     smInput.addEventListener("keydown", function(e) {
         var rows = Array.from(smResults.querySelectorAll(".sm-result"));
         if (!rows.length) return;
@@ -664,12 +664,12 @@
         }
     });
 
-    /* ─── PAGE FADE IN ─── */
+    
     requestAnimationFrame(function() {
         requestAnimationFrame(function() { document.body.classList.add("pg-in"); });
     });
 
-    /* ─── PAGE FADE OUT on navigation ─── */
+    
     document.addEventListener("click", function(e) {
         var a = e.target.closest("a[href]");
         if (!a) return;
@@ -681,7 +681,7 @@
         setTimeout(function() { window.location.href = dest; }, 300);
     });
 
-    /* ─── INTERSECTION OBSERVER for stagger ─── */
+    
     var cardObs = new IntersectionObserver(function(entries) {
         entries.forEach(function(en) {
             if (!en.isIntersecting) return;
@@ -690,7 +690,7 @@
         });
     }, { threshold: 0.08, rootMargin: "0px 0px -40px 0px" });
 
-    /* ─── SKELETON HELPERS ─── */
+    
     function makeSkelCard() {
         return "<div class=\"skel-card\">"
             + "<div class=\"skel skel-img\"></div>"
@@ -703,15 +703,15 @@
 
     var grid = document.getElementById("productGrid");
 
-    /* Show 8 skeleton cards while loading */
+    
     var skelHTML = "";
     for (var s = 0; s < 8; s++) skelHTML += makeSkelCard();
     grid.innerHTML = skelHTML;
 
-    /* ─── CURRENT FILTER ─── */
+    
     var currentFilter = "all";
 
-    /* ─── RENDER PRODUCTS ─── */
+    
     let globalOffers = {};
 
     function renderProducts(list) {
@@ -772,7 +772,7 @@
                     "</div>" +
                 "</div>";
 
-            /* Card click → detalle with fade out */
+            
             var slug = p.id;
             card.addEventListener("click", function() {
                 document.body.classList.remove("pg-in");
@@ -784,7 +784,7 @@
         grid.appendChild(fragment);
         attachFilters();
 
-        /* Lógica de los temporizadores regresivos */
+        
         function updateTimers() {
             grid.querySelectorAll(".offer-countdown").forEach(function(el) {
                 if (el.classList.contains("expired")) return; 
@@ -822,7 +822,7 @@
         window.shopTimerInterval = setInterval(updateTimers, 1000);
     }
 
-    /* ─── FILTER BUTTONS ─── */
+    
     function attachFilters() {
         var buttons = document.querySelectorAll(".filter-btn");
         buttons.forEach(function(btn) {
@@ -837,7 +837,7 @@
         });
     }
 
-    /* ─── LOAD FROM SUPABASE (OFERTAS LUEGO PRODUCTOS) ─── */
+   
     supabase.from("ofertas").select("*").then(function(offerResp) {
         if (!offerResp.error && offerResp.data) {
             var now = new Date().getTime();
@@ -849,7 +849,7 @@
         return supabase.from("productos").select("id,name,category,price,image");
     }).then(function(resp) {
         if (resp && resp.error) { console.error(resp.error); renderProducts([]); return; }
-        // Actualizamos cache de busqueda para asegurar q coincida
+        
         smCache = (resp && resp.data) ? resp.data : [];
         renderProducts(smCache);
     });
