@@ -50,62 +50,110 @@
 
         nav {
             position: fixed; top: 0; width: 100%; height: 64px; z-index: 1000;
-            background: rgba(255,255,255,0.9);
+            background: rgba(255,255,255,0.95);
             backdrop-filter: blur(16px);
             border-bottom: 1px solid rgba(0,0,0,0.06);
             display: flex; align-items: center; justify-content: center;
         }
         .nav-inner {
-            width: 100%; max-width: 1200px; padding: 0 24px;
-            display: flex; align-items: center; justify-content: space-between;
+            width: 100%; max-width: 860px; padding: 0 24px;
+            display: flex; align-items: center;
         }
-        .nav-logo {
-            display: flex; align-items: center; gap: 12px; text-decoration: none;
+
+        /* Barra de búsqueda inline */
+        .nav-search-wrap {
+            flex: 1; display: flex; align-items: center;
+            background: white; border: 1.5px solid #e2e8f0;
+            border-radius: 50px; overflow: visible;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            position: relative;
         }
-        .nav-logo-icon {
-            width: 40px; height: 40px;
-            background: linear-gradient(135deg, var(--blue-700), var(--blue-500));
-            border-radius: 10px; display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0;
+        .nav-search-wrap:focus-within {
+            border-color: var(--blue-500);
+            box-shadow: 0 0 0 3px rgba(96,165,250,0.15);
         }
-        .nav-logo-icon svg { width: 22px; height: 22px; stroke: white; fill: none; stroke-width: 2; }
-        .nav-logo-text {
-            display: flex; flex-direction: column; line-height: 1.15;
+        .nav-search-category {
+            display: flex; align-items: center; gap: 6px;
+            padding: 0 14px; border-right: 1.5px solid #e2e8f0;
+            height: 40px; cursor: pointer; background: none; border-top: none; border-bottom: none; border-left: none;
+            font-size: 0.82rem; font-weight: 600; color: var(--text-main);
+            white-space: nowrap; flex-shrink: 0;
         }
-        .nav-logo-sub {
-            font-size: 9px; font-weight: 500; text-transform: uppercase;
-            letter-spacing: 0.3px; color: var(--text-muted);
+        .nav-search-category svg { width: 12px; height: 12px; stroke: var(--text-muted); fill: none; stroke-width: 2.5; }
+        #smInput {
+            flex: 1; border: none; outline: none; background: transparent;
+            font-size: 0.92rem; font-family: inherit;
+            color: var(--text-main); padding: 0 14px;
+            caret-color: var(--blue-600); min-width: 0;
         }
-        .nav-logo-main {
-            font-size: 18px; font-weight: 800;
-            background: linear-gradient(135deg, var(--blue-800), var(--blue-500));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
+        #smInput::placeholder { color: #94a3b8; }
+        .nav-search-btn {
+            width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+            background: var(--blue-700); border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0; transition: background 0.2s;
         }
-        .nav-links { display: flex; gap: 28px; list-style: none; }
-        .nav-links a {
-            text-decoration: none; font-size: 13px; font-weight: 500;
-            color: var(--text-muted); transition: color 0.2s;
+        .nav-search-btn:hover { background: var(--blue-800); }
+        .nav-search-btn svg { width: 17px; height: 17px; stroke: white; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+        /* Resultados debajo de la barra */
+        .search-modal-results {
+            position: absolute; top: calc(100% + 8px); left: 0; right: 0;
+            background: white; border-radius: 14px; overflow: hidden;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.14);
+            border: 1px solid #e2e8f0;
+            display: none; max-height: 380px; overflow-y: auto; z-index: 9999;
         }
-        .nav-links a:hover { color: var(--blue-700); }
-        .nav-icons { display: flex; gap: 14px; align-items: center; }
-        .nav-icons svg { width: 20px; height: 20px; stroke: var(--text-muted); fill: none; stroke-width: 1.8; cursor: pointer; transition: stroke 0.2s; }
-        .nav-icons svg:hover { stroke: var(--blue-700); }
+        .search-modal-results.show { display: block; }
+        .sm-result {
+            display: flex; align-items: center; gap: 13px;
+            padding: 12px 18px; cursor: pointer;
+            border-bottom: 1px solid #f8fafc;
+            opacity: 0; animation: smFadeIn 0.18s ease forwards;
+            transition: background 0.1s;
+        }
+        @keyframes smFadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .sm-result:nth-child(1) { animation-delay: 0.00s; }
+        .sm-result:nth-child(2) { animation-delay: 0.04s; }
+        .sm-result:nth-child(3) { animation-delay: 0.08s; }
+        .sm-result:nth-child(4) { animation-delay: 0.12s; }
+        .sm-result:nth-child(5) { animation-delay: 0.16s; }
+        .sm-result:nth-child(6) { animation-delay: 0.20s; }
+        .sm-result:nth-child(7) { animation-delay: 0.24s; }
+        .sm-result:last-child { border-bottom: none; }
+        .sm-result:hover, .sm-result:focus { background: #eff6ff; outline: none; }
+        .sm-thumb {
+            width: 46px; height: 46px; border-radius: 9px;
+            flex-shrink: 0; overflow: hidden; background: #eff6ff;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .sm-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .sm-thumb svg { width: 20px; height: 20px; stroke: #93c5fd; fill: none; stroke-width: 1.5; }
+        .sm-info { flex: 1; min-width: 0; }
+        .sm-name {
+            font-size: .88rem; font-weight: 600; color: #0f172a;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .sm-cat { font-size: .73rem; color: #64748b; margin-top: 2px; text-transform: capitalize; }
+        .sm-price { font-size: .92rem; font-weight: 700; color: #2563eb; flex-shrink: 0; }
+        .sm-empty { padding: 30px 20px; text-align: center; color: #64748b; font-size: .9rem; }
+        .sm-empty strong { color: #0f172a; }
+        .sm-hint {
+            padding: 10px 18px; font-size: .73rem; color: #94a3b8;
+            border-top: 1px solid #f1f5f9; display: flex; gap: 16px;
+        }
+        .sm-hint span { display: flex; align-items: center; gap: 4px; }
 
         @media (max-width: 768px) {
             nav { height: 56px; }
-            .nav-links { display: none; }
-            .nav-inner { padding: 0 16px; }
-            .nav-logo-main { font-size: 15px; }
-            .nav-logo-icon { width: 34px; height: 34px; }
-            .nav-logo-icon svg { width: 18px; height: 18px; }
-            .nav-logo-sub { font-size: 7px; }
+            .nav-inner { padding: 0 12px; }
+            .nav-search-category { display: none; }
         }
-
         @media (max-width: 480px) {
-            .nav-logo { gap: 8px; }
-            .nav-icons { gap: 10px; }
-            .nav-icons svg { width: 18px; height: 18px; }
+            .nav-inner { padding: 0 10px; }
         }
 
         .section {
@@ -335,19 +383,19 @@
             .contact-card { padding: 20px 24px; min-width: 160px; width: 100%; max-width: 300px; }
         }
 
-        
+        /* ===== OFERTAS ===== */
         .offers-scroll-wrap {
             position: relative;
         }
         .offers-scroll {
-            display: flex; gap: 20px; overflow-x: auto; scroll-behavior: smooth;
+            display: flex; gap: 16px; overflow-x: auto; scroll-behavior: smooth;
             padding: 8px 4px 16px; -webkit-overflow-scrolling: touch;
             scrollbar-width: thin; scrollbar-color: var(--blue-300) transparent;
         }
         .offers-scroll::-webkit-scrollbar { height: 6px; }
         .offers-scroll::-webkit-scrollbar-track { background: transparent; }
         .offers-scroll::-webkit-scrollbar-thumb { background: var(--blue-300); border-radius: 10px; }
-        .offers-scroll > * { flex: 0 0 260px; }
+        .offers-scroll > * { flex: 0 0 240px; }
         .offers-arrow {
             position: absolute; top: 50%; transform: translateY(-50%); z-index: 3;
             width: 40px; height: 40px; border-radius: 50%;
@@ -362,66 +410,76 @@
         .offers-arrow-left { left: -12px; }
         .offers-arrow-right { right: -12px; }
 
+        /* CSS updates for Offer Card */
         .offer-card {
-            background: var(--bg-white); border-radius: var(--radius);
-            overflow: hidden; border: 2px solid #fde68a;
+            background: #ffffff; border-radius: 12px;
+            overflow: hidden; border: 1px solid #e5e7eb;
             box-shadow: var(--shadow-sm); transition: transform 0.3s, box-shadow 0.3s;
-            position: relative; cursor: pointer; flex: 0 0 260px;
+            position: relative; cursor: pointer;
+            flex: 0 0 240px; display: flex; flex-direction: column;
         }
         .offer-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(251,191,36,0.15);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
         }
-        .offer-image {
-            width: 100%; aspect-ratio: 1 / 1;
-            background: linear-gradient(135deg, #fef3c7, #fde68a);
-            display: flex; align-items: center; justify-content: center;
+        .offer-img-box {
+            position: relative; width: 100%; height: 160px;
+            background: #f9fafb; border-bottom: 1px solid #e5e7eb;
+            padding: 10px; display: flex; align-items: center; justify-content: center;
         }
-        .offer-image svg { width: 60px; height: 60px; stroke: #d97706; fill: none; stroke-width: 1.5; }
-        .offer-info { padding: 14px 16px 16px; }
-        .offer-info h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 3px; }
-        .offer-details {
-            font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;
-            padding: 4px 0 8px; border-bottom: 1px solid #fde68a; margin-bottom: 8px;
+        .offer-img-box img { width: 100%; height: 100%; object-fit: contain; display: block; }
+        .offer-img-box svg { width: 44px; height: 44px; stroke: #9ca3af; fill: none; stroke-width: 1.5; }
+        
+        .discount-badge {
+            position: absolute; top: 10px; right: 10px;
+            background: #ef4444; color: #ffffff; padding: 4px 8px;
+            border-radius: 4px; font-weight: 700; font-size: 0.8rem; z-index: 10;
         }
-        .offer-prices { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
-        .offer-old-price { font-size: 0.9rem; color: #94a3b8; text-decoration: line-through; }
-        .offer-new-price { font-size: 1.15rem; font-weight: 800; color: #dc2626; }
-        .offer-detail-link {
-            font-size: 0.75rem; color: var(--blue-600); font-weight: 500;
-            display: inline-block; margin-bottom: 10px; text-decoration: none;
-            border-bottom: 1px solid transparent; transition: border-color 0.2s;
+        
+        .offer-info {
+            padding: 14px 12px; text-align: center; display: flex; flex-direction: column;
+            align-items: center; flex: 1;
         }
-        .offer-detail-link:hover { border-bottom-color: var(--blue-600); }
-        .offer-btn {
-            width: 100%; padding: 8px 0;
-            background: linear-gradient(135deg, #f59e0b, #ef4444);
-            color: white; border: none; border-radius: 8px;
-            font-weight: 700; font-size: 0.85rem; cursor: pointer;
-            transition: opacity 0.2s;
+        .offer-info h4 {
+            margin: 0 0 6px 0; font-size: 0.9rem; font-weight: 700; color: var(--text-main);
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%;
         }
-        .offer-btn:hover { opacity: 0.9; }
+        
+        .offer-price-container {
+            display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 8px;
+        }
+        .offer-price-container .old-price { text-decoration: line-through; color: #9ca3af; font-size: 0.85rem; }
+        .offer-price-container .new-price { color: #dc2626; font-size: 1.15rem; font-weight: 800; }
+
+        .offer-countdown {
+            font-size: 0.68rem; font-weight: 700; color: #d97706;
+            background: #fffbeb; border: 1px solid #fde68a;
+            padding: 3px 8px; border-radius: 4px; white-space: nowrap;
+        }
+        .offer-countdown.expired {
+            color: #dc2626; background: #fef2f2; border-color: #fecaca;
+        }
 
         @media (max-width: 768px) {
-            .offers-scroll > * { flex: 0 0 210px; }
-            .offer-image svg { width: 44px; height: 44px; }
-            .offer-info { padding: 8px 10px 12px; }
-            .offer-info h4 { font-size: 0.82rem; }
-            .offer-details { font-size: 0.7rem; padding: 3px 0 6px; margin-bottom: 6px; }
-            .offer-old-price { font-size: 0.78rem; }
-            .offer-new-price { font-size: 0.95rem; }
-            .offer-detail-link { font-size: 0.7rem; margin-bottom: 8px; }
-            .offer-btn { font-size: 0.75rem; padding: 7px 0; }
+            .offers-scroll > * { flex: 0 0 200px; }
+            .offer-card { flex: 0 0 200px; }
+            .offer-img-box { height: 130px; }
+            .offer-info h4 { font-size: 0.85rem; }
+            .offer-price-container .old-price { font-size: 0.75rem; }
+            .offer-price-container .new-price { font-size: 1rem; }
+            .offer-countdown { font-size: 0.62rem; }
         }
         @media (max-width: 400px) {
-            .offers-scroll > * { flex: 0 0 180px; }
-            .offer-image svg { width: 36px; height: 36px; }
-            .offer-info { padding: 6px 8px 10px; }
-            .offer-info h4 { font-size: 0.75rem; }
-            .offer-new-price { font-size: 0.85rem; }
+            .offers-scroll > * { flex: 0 0 170px; }
+            .offer-card { flex: 0 0 170px; }
+            .offer-img-box { height: 110px; }
+            .offer-info h4 { font-size: 0.8rem; }
+            .offer-price-container .old-price { font-size: 0.7rem; }
+            .offer-price-container .new-price { font-size: 0.95rem; }
+            .offer-countdown { font-size: 0.58rem; }
         }
     
-        
+        /* ===== CAROUSEL BANNERS ===== */
         .carousel-wrap { max-width: 780px; margin: 0 auto; padding: 88px 24px 0; }
         @media (max-width: 768px) { .carousel-wrap { padding: 72px 16px 0; } }
         .carousel-slider {
@@ -462,11 +520,11 @@
         .carousel-arrow-right { right: 12px; }
 
     
-        
+        /* ─── PAGE TRANSITION ─── */
         body { opacity: 0; transition: opacity 0.32s ease; }
         body.pg-in { opacity: 1; }
 
-        
+        /* ─── SHIMMER SKELETON ─── */
         @keyframes shimmer {
             0%   { background-position: -600px 0; }
             100% { background-position:  600px 0; }
@@ -478,19 +536,18 @@
             border-radius: 8px;
         }
         .skel-banner { width:100%; aspect-ratio:16/7; border-radius:14px; }
-        .skel-offer  { flex:0 0 260px; border-radius:16px; overflow:hidden; border:1px solid #e2e8f0; }
-        .skel-offer-img  { width:100%; aspect-ratio:1/1; }
-        .skel-offer-body { padding:14px 16px; }
+        .skel-offer  { flex:0 0 240px; border-radius:12px; overflow:hidden; border:1px solid #e2e8f0; display: flex; flex-direction: column; }
+        .skel-offer-img  { width:100%; height: 160px; }
+        .skel-offer-body { padding:14px 12px; display: flex; flex-direction: column; align-items: center; }
         .skel-line  { height:10px; margin-bottom:9px; border-radius:5px; }
         .skel-short { width:50%; }
         .skel-mid   { width:72%; }
         .skel-long  { width:90%; }
-        .skel-price { height:14px; width:44%; margin-bottom:10px; border-radius:5px; }
-        .skel-btn   { height:34px; width:100%; border-radius:8px; }
-        @media (max-width:768px) { .skel-offer { flex:0 0 210px; } }
-        @media (max-width:400px) { .skel-offer { flex:0 0 180px; } }
+        .skel-price { height:18px; width:44%; margin-bottom:8px; border-radius:5px; }
+        @media (max-width:768px) { .skel-offer { flex:0 0 200px; } .skel-offer-img { height: 130px; } }
+        @media (max-width:400px) { .skel-offer { flex:0 0 170px; } .skel-offer-img { height: 110px; } }
 
-        
+        /* ─── REVEAL ON SCROLL ─── */
         .reveal {
             opacity: 0;
             transform: translateY(26px);
@@ -498,48 +555,28 @@
         }
         .reveal.on { opacity:1; transform:translateY(0); }
 
+        /* ════ SEARCH (inline nav) ════ */
+
     </style>
 </head>
 <body>
 
     <nav>
         <div class="nav-inner">
-            <a href="/" class="nav-logo">
-                <div class="nav-logo-icon">
-                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="2" y="2" width="20" height="20" rx="2.5"/>
-                        <line x1="2" y1="8" x2="22" y2="8"/>
-                        <rect x="17" y="3.5" width="2.5" height="3" rx="0.5"/>
-                        <rect x="17" y="10" width="2.5" height="7" rx="0.5"/>
-                    </svg>
-                </div>
-                <div class="nav-logo-text">
-                    <span class="nav-logo-sub">La Nueva Comercial</span>
-                    <span class="nav-logo-main">CESAR</span>
-                </div>
-            </a>
-            <ul class="nav-links">
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="index.html#categorias">Categorias</a></li>
-                <li><a href="tienda.html">Tienda</a></li>
-                <li><a href="index.html#nosotros">Nosotros</a></li>
-                <li><a href="index.html#contacto">Contacto</a></li>
-            </ul>
-            <div class="nav-icons">
-                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"/>
-                    <path d="M21 21l-4.35-4.35"/>
-                </svg>
-                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="9" cy="21" r="1"/>
-                    <circle cx="20" cy="21" r="1"/>
-                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-                </svg>
+            <div class="nav-search-wrap">
+                <button class="nav-search-category" type="button">
+                    Categorías
+                    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <input type="text" id="smInput" placeholder="Busca aquí tu producto" autocomplete="off" spellcheck="false">
+                <button class="nav-search-btn" type="button" aria-label="Buscar">
+                    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                </button>
+                <div class="search-modal-results" id="smResults"></div>
             </div>
         </div>
     </nav>
 
-    
     <div class="carousel-wrap">
         <div class="carousel-slider" id="carouselSlider">
             <div class="skel skel-banner" id="bnrSkel" style="position:absolute;inset:0;z-index:1;border-radius:0"></div>
@@ -619,19 +656,18 @@
         </div>
     </section>
 
-    <!-- ===== OFERTAS ===== -->
     <section class="section" id="ofertas">
         <div class="section-header">
             <h2>Ofertas <span>Especiales</span></h2>
-            <p>Aprovecha nuestros precios m&aacute;s bajos en productos seleccionados. &iexcl;Ofertas por tiempo limitado!</p>
+            <p>Aprovecha nuestros precios más bajos en productos seleccionados. ¡Ofertas por tiempo limitado!</p>
         </div>
         <div class="offers-scroll-wrap">
             <button class="offers-arrow offers-arrow-left" id="offersArrowLeft"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
-            <div class="offers-scroll" id="offersScroll"><div class="skel-offer"><div class="skel skel-offer-img"></div><div class="skel-offer-body"><div class="skel skel-line skel-mid"></div><div class="skel skel-line skel-long"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div><div class="skel-offer"><div class="skel skel-offer-img"></div><div class="skel-offer-body"><div class="skel skel-line skel-mid"></div><div class="skel skel-line skel-long"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div><div class="skel-offer"><div class="skel skel-offer-img"></div><div class="skel-offer-body"><div class="skel skel-line skel-mid"></div><div class="skel skel-line skel-long"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div><div class="skel-offer"><div class="skel skel-offer-img"></div><div class="skel-offer-body"><div class="skel skel-line skel-mid"></div><div class="skel skel-line skel-long"></div><div class="skel skel-price"></div><div class="skel skel-btn"></div></div></div></div>
+            <div class="offers-scroll" id="offersScroll"><div class="skel-offer"><div class="skel skel-offer-img"></div><div class="skel-offer-body"><div class="skel skel-line skel-long"></div><div class="skel skel-price" style="margin-top:6px"></div><div class="skel skel-line skel-short" style="margin-top:6px"></div></div></div><div class="skel-offer"><div class="skel skel-offer-img"></div><div class="skel-offer-body"><div class="skel skel-line skel-long"></div><div class="skel skel-price" style="margin-top:6px"></div><div class="skel skel-line skel-short" style="margin-top:6px"></div></div></div><div class="skel-offer"><div class="skel skel-offer-img"></div><div class="skel-offer-body"><div class="skel skel-line skel-long"></div><div class="skel skel-price" style="margin-top:6px"></div><div class="skel skel-line skel-short" style="margin-top:6px"></div></div></div><div class="skel-offer"><div class="skel skel-offer-img"></div><div class="skel-offer-body"><div class="skel skel-line skel-long"></div><div class="skel skel-price" style="margin-top:6px"></div><div class="skel skel-line skel-short" style="margin-top:6px"></div></div></div></div>
             <button class="offers-arrow offers-arrow-right" id="offersArrowRight"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
         </div>
         <div style="text-align:center;margin-top:32px">
-            <a href="tienda.html" style="display:inline-block;padding:14px 36px;background:linear-gradient(135deg,var(--blue-700),var(--blue-500));color:white;border-radius:50px;font-weight:700;font-size:0.95rem;text-decoration:none;transition:transform 0.2s">Ver Cat&aacute;logo Completo</a>
+            <a href="tienda.html" style="display:inline-block;padding:14px 36px;background:linear-gradient(135deg,var(--blue-700),var(--blue-500));color:white;border-radius:50px;font-weight:700;font-size:0.95rem;text-decoration:none;transition:transform 0.2s">Ver Catálogo Completo</a>
         </div>
     </section>
 
@@ -645,7 +681,7 @@
                     en electrodomesticos, repuestos de refrigeracion, plasticos, camas y colchones.
                 </p>
                 <p>
-                    Trabajamos con las mejores marcas y ofrecemos atencion personalizada para
+                    Trabajamos con las mejores marcas and ofrecemos atencion personalizada para
                     garantizar tu satisfaccion. Tu hogar merece lo mejor, y en Comercial Cesar lo encuentras.
                 </p>
                 <div class="about-features">
@@ -754,12 +790,147 @@
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
     const supabase = createClient("https://kjaaoryyltemwsknhswm.supabase.co", "sb_publishable_djzazyfgAB5aqRC6J5N9Kg_XDskw04Y");
 
-    
+
+    /* ════ GLOBAL SEARCH INLINE ════ */
+    var smInput   = document.getElementById("smInput");
+    var smResults = document.getElementById("smResults");
+    var smTimer   = null;
+    var smCache   = [];
+
+    /* Preload product list silently */
+    supabase.from("productos").select("id,name,category,price,image").then(function(r) {
+        if (!r.error) smCache = r.data || [];
+    });
+
+    function smClose() {
+        smResults.classList.remove("show");
+        smResults.innerHTML = "";
+    }
+    function smGoTo(id) {
+        smClose();
+        document.body.classList.remove("pg-in");
+        setTimeout(function() { window.location.href = "detalle.html?id=" + id; }, 280);
+    }
+    window.smGoTo = smGoTo;
+
+    document.addEventListener("click", function(e) {
+        if (!e.target.closest(".nav-search-wrap")) smClose();
+    });
+    document.addEventListener("keydown", function(e) {
+        if (e.key === "Escape") smClose();
+    });
+
+    function smRenderResults(list, q) {
+        smResults.innerHTML = "";
+        if (!list.length) {
+            var empty = document.createElement("div");
+            empty.className = "sm-empty";
+            empty.innerHTML = "Sin resultados para <strong>“" + q + "”</strong>";
+            smResults.appendChild(empty);
+            smResults.classList.add("show");
+            return;
+        }
+        list.slice(0, 7).forEach(function(p) {
+            var row = document.createElement("div");
+            row.className = "sm-result";
+            row.tabIndex = 0;
+            var pid = p.id;
+            row.addEventListener("click", function() { smGoTo(pid); });
+            row.addEventListener("keydown", function(e) { if (e.key === "Enter") smGoTo(pid); });
+
+            var thumb = document.createElement("div");
+            thumb.className = "sm-thumb";
+            if (p.image) {
+                var img = document.createElement("img");
+                img.src = p.image; img.alt = "";
+                thumb.appendChild(img);
+            } else {
+                thumb.innerHTML = '<svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/></svg>';
+            }
+
+            var info = document.createElement("div");
+            info.className = "sm-info";
+
+            var name = document.createElement("div");
+            name.className = "sm-name";
+            /* highlight matching text */
+            var ql = q.toLowerCase();
+            var nl = p.name.toLowerCase();
+            var idx = nl.indexOf(ql);
+            if (idx !== -1) {
+                name.innerHTML = p.name.substring(0, idx)
+                    + "<mark style='background:#dbeafe;color:#1d4ed8;border-radius:2px'>"
+                    + p.name.substring(idx, idx + q.length)
+                    + "</mark>"
+                    + p.name.substring(idx + q.length);
+            } else {
+                name.textContent = p.name;
+            }
+
+            var cat = document.createElement("div");
+            cat.className = "sm-cat";
+            cat.textContent = p.category || "";
+
+            info.appendChild(name); info.appendChild(cat);
+
+            var price = document.createElement("div");
+            price.className = "sm-price";
+            price.textContent = "$" + p.price;
+
+            row.appendChild(thumb); row.appendChild(info); row.appendChild(price);
+            smResults.appendChild(row);
+        });
+
+        /* hint bar */
+        var hint = document.createElement("div");
+        hint.className = "sm-hint";
+        hint.innerHTML = "<span>↑↓ navegar</span><span>⏎ abrir</span><span>Esc cerrar</span>";
+        smResults.appendChild(hint);
+        smResults.classList.add("show");
+    }
+
+    smInput.addEventListener("input", function() {
+        clearTimeout(smTimer);
+        var q = this.value.trim();
+        if (!q) { smResults.classList.remove("show"); return; }
+        smTimer = setTimeout(function() {
+            var ql = q.toLowerCase();
+            var local = smCache.filter(function(p) {
+                return p.name.toLowerCase().indexOf(ql) !== -1
+                    || (p.category || "").toLowerCase().indexOf(ql) !== -1;
+            });
+            if (local.length) { smRenderResults(local, q); return; }
+            supabase.from("productos").select("id,name,category,price,image")
+                .ilike("name", "%" + q + "%").limit(8)
+                .then(function(r) { smRenderResults(r.data || [], q); });
+        }, 160);
+    });
+
+    /* keyboard navigation in results */
+    smInput.addEventListener("keydown", function(e) {
+        var rows = Array.from(smResults.querySelectorAll(".sm-result"));
+        if (!rows.length) return;
+        if (e.key === "ArrowDown") { e.preventDefault(); rows[0].focus(); }
+        if (e.key === "Enter" && rows.length === 1) rows[0].click();
+    });
+    smResults.addEventListener("keydown", function(e) {
+        var rows = Array.from(smResults.querySelectorAll(".sm-result"));
+        var focused = document.activeElement;
+        var idx = rows.indexOf(focused);
+        if (e.key === "ArrowDown" && idx < rows.length - 1) { e.preventDefault(); rows[idx + 1].focus(); }
+        if (e.key === "ArrowUp") {
+            e.preventDefault();
+            if (idx === 0) smInput.focus();
+            else rows[idx - 1].focus();
+        }
+    });
+
+    /* ─── PAGE FADE IN ─── */
     requestAnimationFrame(function() {
         requestAnimationFrame(function() { document.body.classList.add("pg-in"); });
     });
 
-    
+    /* ─── PAGE FADE OUT on link click ─── */
     document.addEventListener("click", function(e) {
         var a = e.target.closest("a[href]");
         if (!a) return;
@@ -771,7 +942,7 @@
         setTimeout(function() { window.location.href = dest; }, 300);
     });
 
-    
+    /* ─── INTERSECTION OBSERVER for .reveal ─── */
     var obs = new IntersectionObserver(function(entries) {
         entries.forEach(function(en) {
             if (!en.isIntersecting) return;
@@ -784,7 +955,7 @@
     }, { threshold: 0.1 });
     document.querySelectorAll(".reveal").forEach(function(el) { obs.observe(el); });
 
-    
+    /* ─── CAROUSEL BANNERS ─── */
     supabase.from("banners").select("*").order("order").then(function(resp) {
         var skel = document.getElementById("bnrSkel");
         var banners = (resp.data || []).filter(function(b) { return b.image; });
@@ -829,13 +1000,16 @@
         setInterval(function() { goTo(current + 1); }, 4000);
     });
 
-    
+    /* ─── OFERTAS: lazy load when section enters viewport ─── */
     var offersLoaded = false;
     function loadOffers() {
         if (offersLoaded) return;
         offersLoaded = true;
         supabase.from("ofertas").select("*").then(function(resp) {
-            var list = (!resp.error && resp.data) ? resp.data : [];
+            var now = new Date().getTime();
+            var list = (!resp.error && resp.data) ? resp.data.filter(function(o) {
+                return !o.expiry || new Date(o.expiry).getTime() > now;
+            }) : [];
             var container = document.getElementById("offersScroll");
             if (!list.length) {
                 container.innerHTML = "<div style=\"flex:0 0 100%;text-align:center;padding:40px 20px;color:var(--text-muted)\"><p style=\"font-size:0.95rem\">No hay ofertas disponibles.</p></div>";
@@ -846,36 +1020,78 @@
                 var slug = p.product_id || (p.product_name || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
                 var card = document.createElement("div");
                 card.className = "offer-card reveal";
-                card.style.cssText = "opacity:0;transform:translateY(26px);transition:opacity 0.48s ease,transform 0.48s ease";
-                var imgHtml = p.image
-                    ? ("<img src=\"" + p.image + "\" loading=\"lazy\" style=\"width:100%;height:100%;object-fit:cover;display:block\" alt=\"\">")
-                    : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M12 8v8M8 12h8"/></svg>';
+                
+                /* Sincronización de la imagen mediante búsqueda en smCache */
+                var matchingProd = smCache.find(function(item) { return item.id === p.product_id; });
+                var productImg = (matchingProd && matchingProd.image) ? matchingProd.image : p.image;
+
+                var imgHtml = productImg
+                    ? ("<img src=\"" + productImg + "\" loading=\"lazy\" alt=\"\">")
+                    : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"2\" y=\"2\" width=\"20\" height=\"20\" rx=\"2\"/><path d=\"M12 8v8M8 12h8\"/></svg>';
+                
+                var countdownHtml = p.expiry
+                    ? "<div class=\"offer-countdown\" data-expiry=\"" + p.expiry + "\"></div>"
+                    : "";
+
+                var discount = 0;
+                if (p.original_price && p.sale_price && p.original_price > p.sale_price) {
+                    discount = Math.round(((p.original_price - p.sale_price) / p.original_price) * 100);
+                }
+                
+                var badgeHtml = discount > 0 
+                    ? "<div class=\"discount-badge\">-" + discount + "%</div>" 
+                    : "";
+
                 card.innerHTML =
-                    "<div class=\"offer-image\">" + imgHtml + "</div>" +
-                    "<div class=\"offer-info\">" +
-                    "<h4>" + (p.product_name || "") + "</h4>" +
-                    "<div class=\"offer-prices\">" +
-                    "<span class=\"offer-old-price\">$" + (p.original_price || 0) + "</span>" +
-                    "<span class=\"offer-new-price\">$" + (p.sale_price || 0) + "</span>" +
+                    "<div class=\"offer-img-box\">" + 
+                        imgHtml + badgeHtml +
                     "</div>" +
-                    "<span class=\"offer-detail-link\" style=\"display:block;margin-bottom:10px\">Ver m&aacute;s detalles</span>" +
-                    "<button class=\"offer-btn\">Consultar Oferta</button>" +
+                    "<div class=\"offer-info\">" +
+                        "<h4>" + (p.product_name || "") + "</h4>" +
+                        "<div class=\"offer-price-container\">" +
+                            "<span class=\"old-price\">$" + (p.original_price || 0) + "</span>" +
+                            "<span class=\"new-price\">$" + (p.sale_price || 0) + "</span>" +
+                        "</div>" +
+                        countdownHtml + 
                     "</div>";
-                card.querySelector(".offer-card, .offer-image").addEventListener
-                    || card.addEventListener("click", (function(s) { return function() { window.location.href = "detalle.html?id=" + s; }; })(slug));
+
                 card.addEventListener("click", (function(s) { return function() {
                     document.body.classList.remove("pg-in");
                     setTimeout(function() { window.location.href = "detalle.html?id=" + s; }, 300);
                 }; })(slug));
-                var waBtn = card.querySelector(".offer-btn");
-                var pname = p.product_name || "";
-                waBtn.addEventListener("click", function(ev) {
-                    ev.stopPropagation();
-                    window.open("https://wa.me/584243532288?text=Hola,%20me%20interesa%20" + encodeURIComponent(pname) + "%20en%20oferta", "_blank");
-                });
+
                 container.appendChild(card);
                 setTimeout(function(el) { return function() { el.style.opacity = "1"; el.style.transform = "translateY(0)"; }; }(card), 80 + i * 100);
             });
+
+            /* Lógica de los temporizadores regresivos */
+            function updateTimers() {
+                container.querySelectorAll(".offer-countdown").forEach(function(el) {
+                    if (el.classList.contains("expired")) return; 
+                    var exp = el.getAttribute("data-expiry");
+                    if (!exp) return;
+                    var d = new Date(exp).getTime();
+                    var now = new Date().getTime();
+                    var diff = d - now;
+
+                    if (diff <= 0) {
+                        var card = el.closest(".offer-card");
+                        if (card) card.remove();
+                        if (!container.querySelector(".offer-card")) {
+                            container.innerHTML = "<div style=\"flex:0 0 100%;text-align:center;padding:40px 20px;color:var(--text-muted)\"><p style=\"font-size:0.95rem\">No hay ofertas disponibles.</p></div>";
+                        }
+                    } else {
+                        var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                        var hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        var mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                        var secs = Math.floor((diff % (1000 * 60)) / 1000);
+                        el.innerHTML = "⏱ Termina en: " + days + "d " + hours + "h " + mins + "m " + secs + "s";
+                    }
+                });
+            }
+            updateTimers();
+            setInterval(updateTimers, 1000);
+
         });
     }
 
@@ -885,7 +1101,7 @@
     }, { rootMargin: "200px" });
     lazyObs.observe(offerSection);
 
-    
+    /* ─── OFFER SCROLL ARROWS ─── */
     document.getElementById("offersArrowLeft").addEventListener("click", function() {
         document.getElementById("offersScroll").scrollBy({ left: -300, behavior: "smooth" });
     });

@@ -4,39 +4,140 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalle del Producto - La Nueva Comercial CESAR</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%232563eb'/%3E%3Cstop offset='100%25' stop-color='%2360a5fa'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M23.5 8.5 A 10.5 10.5 0 1 0 23.5 23.5' stroke='url(%23g)' stroke-width='4.5' stroke-linecap='round' fill='none'/%3E%3Cpath d='M21 11 A 7 7 0 1 0 21 21' stroke='%2360a5fa' stroke-width='2' stroke-linecap='round' fill='none'/%3E%3C/svg%3E">
-        <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%232563eb'/%3E%3Cstop offset='100%25' stop-color='%2360a5fa'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M23.5 8.5 A 10.5 10.5 0 1 0 23.5 23.5' stroke='url(%23g)' stroke-width='4.5' stroke-linecap='round' fill='none'/%3E%3Cpath d='M21 11 A 7 7 0 1 0 21 21' stroke='%2360a5fa' stroke-width='2' stroke-linecap='round' fill='none'/%3E%3C/svg%3E">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --blue-900: #1e3a8a;
-            --blue-800: #1e40af;
-            --blue-700: #2563eb;
-            --blue-600: #3b82f6;
-            --blue-500: #60a5fa;
-            --blue-100: #dbeafe;
+            --blue-900: #0c1f3b; --blue-800: #142d52; --blue-700: #1e3a8a;
+            --blue-600: #2563eb; --blue-500: #3b82f6; --blue-400: #60a5fa;
+            --blue-300: #93c5fd; --blue-200: #bfdbfe; --blue-100: #dbeafe;
             --blue-50: #eff6ff;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --bg-color: #f8fafc;
-            --bg-white: #ffffff;
-            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-            --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
-            --radius: 16px;
-            --radius-sm: 10px;
+            --text-body: #1e293b; --text-muted: #64748b;
+            --bg-white: #ffffff; --bg-gray: #f8fafc;
+            --radius: 14px; --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.1);
         }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: var(--font);
-            background: var(--bg-color);
-            color: var(--text-main);
-            -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-gray); color: var(--text-body); line-height: 1.6;
         }
-        img { max-width: 100%; display: block; }
+        .detail-container {
+            max-width: 900px; margin: 104px auto 40px; padding: 0 20px;
+        }
+        .detail-card {
+            background: var(--bg-white); border-radius: var(--radius);
+            box-shadow: var(--shadow-sm); overflow: hidden; display: grid;
+            grid-template-columns: 1fr 1fr; gap: 30px; padding: 30px;
+        }
+        .detail-gallery {
+            display: flex; flex-direction: column; gap: 12px;
+        }
+        
+        /* Contenedor principal de imagen con posición relativa para la etiqueta de oferta */
+        .main-img-wrap {
+            position: relative;
+            aspect-ratio: 1/1; background: var(--blue-50); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
+        }
+        .main-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.22s ease; }
+        .main-img-wrap img.img-fade { opacity: 0; }
 
+        /* Miniaturas de galería */
+        .gallery-thumbs { display: flex; gap: 8px; flex-wrap: wrap; }
+        .gallery-thumb {
+            width: 58px; height: 58px; border-radius: 8px; overflow: hidden;
+            cursor: pointer; border: 2px solid transparent;
+            transition: border-color 0.18s ease, opacity 0.18s ease;
+            flex-shrink: 0; background: var(--blue-50);
+        }
+        .gallery-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .gallery-thumb.active { border-color: var(--blue-500); }
+        .gallery-thumb:not(.active) { opacity: 0.55; }
+        .gallery-thumb:hover:not(.active) { opacity: 0.85; }
+        
+        /* Estilos de las ofertas */
+        .discount-badge {
+            position: absolute; top: 12px; right: 12px;
+            background: #ef4444; color: #ffffff; padding: 6px 12px;
+            border-radius: 6px; font-weight: 800; font-size: 1rem; z-index: 10;
+            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+        }
+        .offer-countdown {
+            font-size: 0.85rem; font-weight: 700; color: #d97706;
+            background: #fffbeb; border: 1px solid #fde68a;
+            padding: 6px 12px; border-radius: 6px;
+            display: inline-block; margin-bottom: 16px;
+        }
+        .offer-countdown.expired {
+            color: #dc2626; background: #fef2f2; border-color: #fecaca;
+        }
+        .price-wrap { 
+            display: flex; align-items: center; gap: 12px; margin-bottom: 16px; 
+        }
+        .detail-price { font-size: 1.8rem; font-weight: 800; color: var(--blue-700); margin-bottom: 16px; margin-top: 0; line-height: 1; }
+        .detail-price.is-offer { color: #dc2626; margin-bottom: 0; }
+        .detail-old-price { font-size: 1.1rem; color: #9ca3af; text-decoration: line-through; font-weight: 600; }
+
+        .detail-info { display: flex; flex-direction: column; }
+        .detail-cat { font-size: 0.75rem; color: var(--blue-700); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .detail-title { font-size: 1.6rem; font-weight: 800; color: var(--blue-900); margin-bottom: 10px; line-height: 1.2; }
+        .detail-desc { color: var(--text-muted); font-size: 0.92rem; margin-bottom: 20px; }
+        .detail-specs { margin-bottom: 24px; border-top: 1px solid #e2e8f0; padding-top: 16px; }
+        .spec-row { display: flex; justify-content: space-between; font-size: 0.85rem; padding: 6px 0; border-bottom: 1px solid #f1f5f9; }
+        .spec-label { color: var(--text-muted); font-weight: 500; }
+        .spec-value { color: var(--text-body); font-weight: 600; }
+        
+        /* Botón de consulta mejorado */
+        .detail-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white; border: none; padding: 14px 24px; border-radius: 10px;
+            font-weight: 800; font-size: 1.05rem; cursor: pointer; transition: all 0.2s ease;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+        }
+        .detail-btn:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+        }
+        .detail-btn svg { width: 22px; height: 22px; stroke: currentColor; }
+
+        .detail-back { display: inline-block; margin-top: 16px; font-size: 0.85rem; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+        .detail-back:hover { color: var(--blue-700); }
+
+        /* Estilos de Productos Relacionados */
+        .related-section { margin-top: 44px; padding-top: 10px; }
+        .related-heading { font-size: 1.25rem; font-weight: 800; color: var(--blue-900); margin-bottom: 20px; letter-spacing: -0.3px; }
+        .related-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .related-card {
+            background: var(--bg-white); border-radius: var(--radius);
+            box-shadow: var(--shadow-sm); padding: 14px; display: flex;
+            flex-direction: column; gap: 10px; cursor: pointer; transition: all 0.22s ease;
+        }
+        .related-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+        .related-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 10px; background: var(--blue-50); }
+        .related-info { display: flex; flex-direction: column; gap: 4px; flex: 1; justify-content: space-between; }
+        .related-name { font-size: 0.88rem; font-weight: 700; color: var(--blue-900); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.3; }
+        .related-price { font-size: 0.95rem; font-weight: 800; color: var(--blue-600); }
+        .related-img-wrap { position: relative; width: 100%; aspect-ratio: 1/1; }
+        .related-img-wrap img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; background: var(--blue-50); display: block; }
+        .related-badge { position: absolute; top: 6px; left: 6px; background: #ef4444; color: #fff; font-size: 0.68rem; font-weight: 800; padding: 3px 7px; border-radius: 5px; }
+
+        @media (max-width: 768px) {
+            .detail-card { grid-template-columns: 1fr; gap: 20px; padding: 20px; }
+            .detail-title { font-size: 1.3rem; }
+            .detail-price { font-size: 1.5rem; }
+            .related-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        }
+        @media (max-width: 480px) {
+            .related-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        }
+
+        body { opacity: 0; transition: opacity 0.32s ease; }
+        body.pg-in { opacity: 1; }
+
+        /* ════ NAVBAR & SEARCH MODAL STYLES ════ */
         nav {
             position: fixed; top: 0; width: 100%; height: 64px; z-index: 1000;
             background: rgba(255,255,255,0.9);
@@ -77,6 +178,7 @@
             color: var(--text-muted); transition: color 0.2s;
         }
         .nav-links a:hover { color: var(--blue-700); }
+        .nav-links a.active { color: var(--blue-700); border-bottom: 2px solid var(--blue-500); padding-bottom: 2px; }
         .nav-icons { display: flex; gap: 14px; align-items: center; }
         .nav-icons svg { width: 20px; height: 20px; stroke: var(--text-muted); fill: none; stroke-width: 1.8; cursor: pointer; transition: stroke 0.2s; }
         .nav-icons svg:hover { stroke: var(--blue-700); }
@@ -91,164 +193,103 @@
             .nav-logo-sub { font-size: 7px; }
         }
 
-        .detail-wrap {
-            max-width: 1200px; margin: 0 auto; padding: 88px 24px 60px;
+        .search-modal-overlay {
+            position: fixed; inset: 0; z-index: 9999;
+            background: rgba(10,15,30,0.72);
+            backdrop-filter: blur(6px);
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.25s ease;
+            display: flex; flex-direction: column;
+            align-items: center; padding-top: 80px;
         }
-        .detail-breadcrumb {
-            font-size: 0.82rem; color: var(--text-muted); margin-bottom: 24px;
+        .search-modal-overlay.open {
+            opacity: 1; pointer-events: all;
         }
-        .detail-breadcrumb a {
-            color: var(--blue-700); text-decoration: none;
+        .search-modal-box {
+            width: 100%; max-width: 620px;
+            margin: 0 20px;
+            transform: translateY(-16px) scale(0.97);
+            transition: transform 0.28s cubic-bezier(.34,1.3,.64,1);
         }
-        .detail-breadcrumb a:hover { text-decoration: underline; }
-        .detail-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start;
+        .search-modal-overlay.open .search-modal-box {
+            transform: translateY(0) scale(1);
         }
-        .detail-image {
-            width: 100%; aspect-ratio: 1 / 1;
-            background: linear-gradient(135deg, var(--blue-50), var(--blue-100));
-            border-radius: var(--radius);
+        .search-modal-input-wrap {
+            display: flex; align-items: center; gap: 14px;
+            background: white; border-radius: 16px;
+            padding: 14px 18px;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+        }
+        .search-modal-input-wrap svg {
+            width: 22px; height: 22px; flex-shrink: 0;
+            stroke: #2563eb; fill: none;
+            stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
+        }
+        #smInput {
+            flex: 1; border: none; outline: none;
+            font-size: 1.08rem; font-family: inherit;
+            color: #0f172a; background: transparent;
+            caret-color: #2563eb;
+        }
+        #smInput::placeholder { color: #94a3b8; }
+        .search-modal-kbd {
+            font-size: .7rem; color: #94a3b8;
+            background: #f1f5f9; border: 1px solid #e2e8f0;
+            border-radius: 5px; padding: 2px 6px;
+            font-family: monospace; flex-shrink: 0;
+            display: none;
+        }
+        @media (min-width: 640px) { .search-modal-kbd { display: block; } }
+
+        .search-modal-results {
+            background: white; border-radius: 14px;
+            margin-top: 10px; overflow: hidden;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.22);
+            display: none; max-height: 380px; overflow-y: auto;
+        }
+        .search-modal-results.show { display: block; }
+        .sm-result {
+            display: flex; align-items: center; gap: 13px;
+            padding: 12px 18px; cursor: pointer;
+            border-bottom: 1px solid #f8fafc; transition: background 0.1s;
+        }
+        .sm-result:last-child { border-bottom: none; }
+        .sm-result:hover, .sm-result:focus { background: #eff6ff; outline: none; }
+        .sm-thumb {
+            width: 46px; height: 46px; border-radius: 9px;
+            flex-shrink: 0; overflow: hidden; background: #eff6ff;
             display: flex; align-items: center; justify-content: center;
         }
-        .detail-image svg {
-            width: 120px; height: 120px; stroke: var(--blue-400); fill: none; stroke-width: 1.2;
+        .sm-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .sm-thumb svg { width: 20px; height: 20px; stroke: #93c5fd; fill: none; stroke-width: 1.5; }
+        .sm-info { flex: 1; min-width: 0; }
+        .sm-name {
+            font-size: .88rem; font-weight: 600; color: #0f172a;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
-        .detail-category {
-            font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
-            letter-spacing: 0.5px; color: var(--blue-700); margin-bottom: 8px;
+        .sm-cat { font-size: .73rem; color: #64748b; margin-top: 2px; text-transform: capitalize; }
+        .sm-price { font-size: .92rem; font-weight: 700; color: #2563eb; flex-shrink: 0; }
+        .sm-empty { padding: 30px 20px; text-align: center; color: #64748b; font-size: .9rem; }
+        .sm-empty strong { color: #0f172a; }
+        .sm-hint {
+            padding: 10px 18px; font-size: .73rem; color: #94a3b8;
+            border-top: 1px solid #f1f5f9; display: flex; gap: 16px;
         }
-        .detail-title {
-            font-size: 1.8rem; font-weight: 800; margin-bottom: 8px; line-height: 1.2;
-        }
-        .detail-price {
-            font-size: 2rem; font-weight: 900; color: var(--blue-700); margin-bottom: 16px;
-        }
-        .detail-desc {
-            font-size: 0.95rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 24px;
-        }
-        .detail-specs {
-            border: 1px solid #e2e8f0; border-radius: var(--radius-sm);
-            overflow: hidden; margin-bottom: 24px;
-        }
-        .detail-specs-title {
-            font-size: 0.95rem; font-weight: 700; padding: 14px 18px;
-            background: var(--blue-50); border-bottom: 1px solid #e2e8f0;
-        }
-        .detail-specs table { width: 100%; border-collapse: collapse; }
-        .detail-specs td {
-            padding: 10px 18px; font-size: 0.88rem; border-bottom: 1px solid #e2e8f0;
-        }
-        .detail-specs td:first-child {
-            font-weight: 600; color: var(--text-main); width: 40%;
-            background: #fafafa;
-        }
-        .detail-specs td:last-child { color: var(--text-muted); }
-        .detail-specs tr:last-child td { border-bottom: none; }
-        .detail-btn {
-            display: inline-flex; align-items: center; gap: 10px;
-            padding: 14px 36px;
-            background: linear-gradient(135deg, var(--blue-700), var(--blue-500));
-            color: white; border: none; border-radius: 50px;
-            font-weight: 700; font-size: 1rem; cursor: pointer;
-            transition: opacity 0.2s; text-decoration: none;
-        }
-        .detail-btn:hover { opacity: 0.9; }
-        .detail-btn svg { width: 20px; height: 20px; stroke: white; fill: none; stroke-width: 2; }
-        .detail-back {
-            display: inline-block; margin-top: 16px; color: var(--blue-700);
-            text-decoration: none; font-size: 0.88rem; font-weight: 500;
-        }
-        .detail-back:hover { text-decoration: underline; }
-        .detail-notfound {
-            text-align: center; padding: 80px 20px;
-        }
-        .detail-notfound h2 { font-size: 1.5rem; margin-bottom: 12px; }
-        .detail-notfound p { color: var(--text-muted); margin-bottom: 20px; }
-        .detail-notfound a {
-            display: inline-block; padding: 12px 28px;
-            background: linear-gradient(135deg, var(--blue-700), var(--blue-500));
-            color: white; border-radius: 50px; text-decoration: none; font-weight: 600;
-        }
+        .sm-hint span { display: flex; align-items: center; gap: 4px; }
 
-        @media (max-width: 768px) {
-            .detail-grid { grid-template-columns: 1fr; gap: 24px; }
-            .detail-wrap { padding: 72px 16px 40px; }
-            .detail-title { font-size: 1.4rem; }
-            .detail-price { font-size: 1.5rem; }
-            .detail-image svg { width: 80px; height: 80px; }
-            .detail-specs td { font-size: 0.8rem; padding: 8px 14px; }
+        .nav-search-btn {
+            background: none; border: none; cursor: pointer;
+            padding: 4px; display: flex; align-items: center;
+            border-radius: 6px; transition: background 0.15s;
         }
-
-        footer {
-            background: linear-gradient(135deg, var(--blue-900), var(--blue-800));
-            color: rgba(255,255,255,0.7); padding: 48px 20px 0;
+        .nav-search-btn:hover { background: rgba(0,0,0,0.05); }
+        .nav-search-btn svg {
+            width: 20px; height: 20px;
+            stroke: var(--text-muted); fill: none;
+            stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+            transition: stroke 0.2s;
         }
-        .footer-inner {
-            max-width: 1200px; margin: 0 auto;
-            display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px;
-        }
-        .footer-brand p { font-size: 0.85rem; line-height: 1.7; margin-top: 10px; }
-        .footer-col h4 {
-            color: #fff; font-size: 0.9rem; font-weight: 700; margin-bottom: 14px;
-        }
-        .footer-col a {
-            display: block; color: rgba(255,255,255,0.6); text-decoration: none;
-            font-size: 0.85rem; margin-bottom: 8px; transition: color 0.2s;
-        }
-        .footer-col a:hover { color: #fff; }
-        .footer-bottom {
-            max-width: 1200px; margin: 0 auto;
-            border-top: 1px solid rgba(255,255,255,0.08);
-            padding: 20px 0; text-align: center; font-size: 0.8rem;
-        }
-        @media (max-width: 768px) {
-            .footer-inner { grid-template-columns: 1fr 1fr; gap: 30px; }
-        }
-        @media (max-width: 480px) {
-            .footer-inner { grid-template-columns: 1fr; gap: 24px; }
-        }
-
-        
-        body { opacity: 0; transition: opacity 0.32s ease; }
-        body.pg-in { opacity: 1; }
-
-        
-        @keyframes shimmer {
-            0%   { background-position: -600px 0; }
-            100% { background-position:  600px 0; }
-        }
-        .skel {
-            background: linear-gradient(90deg,#e2e8f0 25%,#f1f5f9 50%,#e2e8f0 75%);
-            background-size: 1200px 100%;
-            animation: shimmer 1.4s infinite linear;
-            border-radius: 8px;
-        }
-        .skel-sq   { width:100%; aspect-ratio:1/1; border-radius:14px; }
-        .skel-line { height:11px; margin-bottom:12px; border-radius:5px; }
-        .skel-xs   { width:30%; }
-        .skel-sm   { width:52%; }
-        .skel-md   { width:72%; }
-        .skel-lg   { width:90%; }
-        .skel-xl   { width:100%; }
-        .skel-price{ height:28px; width:38%; margin-bottom:20px; border-radius:6px; }
-        .skel-btn  { height:50px; width:64%; border-radius:50px; margin-top:8px; }
-        .skel-specs{ height:120px; width:100%; border-radius:10px; }
-
-        
-        .detail-reveal {
-            opacity: 0;
-            transform: translateY(18px);
-            transition: opacity 0.45s ease, transform 0.45s ease;
-        }
-        .detail-reveal.on { opacity: 1; transform: translateY(0); }
-
-        
-        .detail-image img {
-            transition: transform 0.4s ease;
-        }
-        .detail-image:hover img { transform: scale(1.03); }
-        .detail-image { overflow: hidden; }
-
+        .nav-search-btn:hover svg { stroke: var(--blue-700); }
     </style>
 </head>
 <body>
@@ -277,10 +318,9 @@
                 <li><a href="index.html#contacto">Contacto</a></li>
             </ul>
             <div class="nav-icons">
-                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"/>
-                    <path d="M21 21l-4.35-4.35"/>
-                </svg>
+                <button class="nav-search-btn" id="smToggle" aria-label="Buscar productos">
+                    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                </button>
                 <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="9" cy="21" r="1"/>
                     <circle cx="20" cy="21" r="1"/>
@@ -290,72 +330,391 @@
         </div>
     </nav>
 
-    <div class="detail-wrap" id="detailWrap">
-        <div class="detail-breadcrumb">
-            <a href="tienda.html">Tienda</a> / <span id="breadcrumbName">Producto</span>
-        </div>
-        <div id="detailContent">
-            <div id="detailSkel" class="detail-grid">
-                <div class="skel skel-sq"></div>
-                <div>
-                    <div class="skel skel-line skel-xs" style="margin-bottom:16px"></div>
-                    <div class="skel skel-line skel-lg" style="height:28px;margin-bottom:12px"></div>
-                    <div class="skel skel-line skel-md" style="height:28px;margin-bottom:12px"></div>
-                    <div class="skel skel-price"></div>
-                    <div class="skel skel-line skel-xl"></div>
-                    <div class="skel skel-line skel-lg"></div>
-                    <div class="skel skel-line skel-md"></div>
-                    <div class="skel skel-specs" style="margin:16px 0"></div>
-                    <div class="skel skel-btn"></div>
-                </div>
+    <div class="search-modal-overlay" id="smOverlay" role="dialog" aria-modal="true" aria-label="Buscar productos">
+        <div class="search-modal-box">
+            <div class="search-modal-input-wrap">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                <input type="text" id="smInput" placeholder="Buscar productos, categorías..." autocomplete="off" spellcheck="false">
+                <span class="search-modal-kbd">Esc</span>
             </div>
+            <div class="search-modal-results" id="smResults"></div>
         </div>
     </div>
 
-    <footer>
-        <div class="footer-inner">
-            <div class="footer-brand">
-                <div class="nav-logo-text">
-                    <span class="nav-logo-sub" style="color: rgba(255,255,255,0.4);">La Nueva Comercial</span>
-                    <span class="nav-logo-main" style="font-size: 22px;">CESAR</span>
-                </div>
-                <p>Electrodomesticos, repuestos de refrigeracion, plasticos, camas, colchones y mucho mas para tu hogar.</p>
-            </div>
-            <div class="footer-col">
-                <h4>Categorias</h4>
-                <a href="#">Electrodomesticos</a>
-                <a href="#">Repuestos de Refrigeracion</a>
-                <a href="#">plasticos</a>
-                <a href="#">Camas y Colchones</a>
-            </div>
-            <div class="footer-col">
-                <h4>Enlaces</h4>
-                <a href="index.html">Inicio</a>
-                <a href="tienda.html">Tienda</a>
-                <a href="index.html#nosotros">Nosotros</a>
-                <a href="index.html#contacto">Contacto</a>
-            </div>
-            <div class="footer-col">
-                <h4>Contacto</h4>
-                <a href="https://wa.me/584145610065">WhatsApp</a>
-                <a href="https://www.instagram.com/lanuevacomercialcesar/">Instagram</a>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            2026 La Nueva Comercial Cesar. Todos los derechos reservados.
-        </div>
-    </footer>
+    <div class="detail-container" id="detailContainer"></div>
 
 <script type="module">
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
     const supabase = createClient("https://kjaaoryyltemwsknhswm.supabase.co", "sb_publishable_djzazyfgAB5aqRC6J5N9Kg_XDskw04Y");
 
-    
+    /* ════ GLOBAL SEARCH MODAL LOGIC ════ */
+    var smOverlay = document.getElementById("smOverlay");
+    var smInput   = document.getElementById("smInput");
+    var smResults = document.getElementById("smResults");
+    var smToggle  = document.getElementById("smToggle");
+    var smTimer   = null;
+    var smCache   = [];
+
+    /* Preload product list silently */
+    supabase.from("productos").select("id,name,category,price,image").then(function(r) {
+        if (!r.error) smCache = r.data || [];
+    });
+
+    function smOpen() {
+        smOverlay.classList.add("open");
+        document.body.style.overflow = "hidden";
+        setTimeout(function() { smInput.focus(); }, 60);
+    }
+    function smClose() {
+        smOverlay.classList.remove("open");
+        document.body.style.overflow = "";
+        setTimeout(function() {
+            smResults.classList.remove("show");
+            smResults.innerHTML = "";
+            smInput.value = "";
+        }, 250);
+    }
+    function smGoTo(id) {
+        smClose();
+        document.body.classList.remove("pg-in");
+        setTimeout(function() { window.location.href = "detalle.html?id=" + id; }, 280);
+    }
+    window.smGoTo = smGoTo;
+
+    smToggle.addEventListener("click", smOpen);
+    smOverlay.addEventListener("click", function(e) {
+        if (e.target === smOverlay) smClose();
+    });
+    document.addEventListener("keydown", function(e) {
+        if (e.key === "Escape") smClose();
+    });
+
+    function smRenderResults(list, q) {
+        smResults.innerHTML = "";
+        if (!list.length) {
+            var empty = document.createElement("div");
+            empty.className = "sm-empty";
+            empty.innerHTML = "Sin resultados para <strong>“" + q + "”</strong>";
+            smResults.appendChild(empty);
+            smResults.classList.add("show");
+            return;
+        }
+        list.slice(0, 7).forEach(function(p) {
+            var row = document.createElement("div");
+            row.className = "sm-result";
+            row.tabIndex = 0;
+            var pid = p.id;
+            row.addEventListener("click", function() { smGoTo(pid); });
+            row.addEventListener("keydown", function(e) { if (e.key === "Enter") smGoTo(pid); });
+
+            var thumb = document.createElement("div");
+            thumb.className = "sm-thumb";
+            if (p.image) {
+                var img = document.createElement("img");
+                img.src = p.image; img.alt = "";
+                thumb.appendChild(img);
+            } else {
+                thumb.innerHTML = '<svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/></svg>';
+            }
+
+            var info = document.createElement("div");
+            info.className = "sm-info";
+
+            var name = document.createElement("div");
+            name.className = "sm-name";
+            var ql = q.toLowerCase();
+            var nl = p.name.toLowerCase();
+            var idx = nl.indexOf(ql);
+            if (idx !== -1) {
+                name.innerHTML = p.name.substring(0, idx)
+                    + "<mark style='background:#dbeafe;color:#1d4ed8;border-radius:2px'>"
+                    + p.name.substring(idx, idx + q.length)
+                    + "</mark>"
+                    + p.name.substring(idx + q.length);
+            } else {
+                name.textContent = p.name;
+            }
+
+            var cat = document.createElement("div");
+            cat.className = "sm-cat";
+            cat.textContent = p.category || "";
+
+            info.appendChild(name); info.appendChild(cat);
+
+            var price = document.createElement("div");
+            price.className = "sm-price";
+            price.textContent = "$" + p.price;
+
+            row.appendChild(thumb); row.appendChild(info); row.appendChild(price);
+            smResults.appendChild(row);
+        });
+
+        var hint = document.createElement("div");
+        hint.className = "sm-hint";
+        hint.innerHTML = "<span>↑↓ navegar</span><span>⏎ abrir</span><span>Esc cerrar</span>";
+        smResults.appendChild(hint);
+        smResults.classList.add("show");
+    }
+
+    smInput.addEventListener("input", function() {
+        clearTimeout(smTimer);
+        var q = this.value.trim();
+        if (!q) { smResults.classList.remove("show"); return; }
+        smTimer = setTimeout(function() {
+            var ql = q.toLowerCase();
+            var local = smCache.filter(function(p) {
+                return p.name.toLowerCase().indexOf(ql) !== -1
+                    || (p.category || "").toLowerCase().indexOf(ql) !== -1;
+            });
+            if (local.length) { smRenderResults(local, q); return; }
+            supabase.from("productos").select("id,name,category,price,image")
+                .ilike("name", "%" + q + "%").limit(8)
+                .then(function(r) { smRenderResults(r.data || [], q); });
+        }, 160);
+    });
+
+    smInput.addEventListener("keydown", function(e) {
+        var rows = Array.from(smResults.querySelectorAll(".sm-result"));
+        if (!rows.length) return;
+        if (e.key === "ArrowDown") { e.preventDefault(); rows[0].focus(); }
+        if (e.key === "Enter" && rows.length === 1) rows[0].click();
+    });
+
+    smResults.addEventListener("keydown", function(e) {
+        var rows = Array.from(smResults.querySelectorAll(".sm-result"));
+        var focused = document.activeElement;
+        var idx = rows.indexOf(focused);
+        if (e.key === "ArrowDown" && idx < rows.length - 1) { e.preventDefault(); rows[idx + 1].focus(); }
+        if (e.key === "ArrowUp") {
+            e.preventDefault();
+            if (idx === 0) smInput.focus();
+            else rows[idx - 1].focus();
+        }
+    });
+
+    /* ════ EXISTING DETALLE LOGIC ════ */
+    var params = new URLSearchParams(window.location.search);
+    var id = params.get("id");
+    var container = document.getElementById("detailContainer");
+
+    if (!id) {
+        container.innerHTML = "<p>Producto no encontrado.</p>";
+    } else {
+        supabase.from("productos").select("*").eq("id", id).single().then(function(resp) {
+            if (resp.error || !resp.data) {
+                container.innerHTML = "<p>Producto no encontrado o hubo un error.</p>";
+                return;
+            }
+            var p = resp.data;
+
+            // Consultar si este producto tiene una oferta activa
+            supabase.from("ofertas").select("*").eq("product_id", id).single().then(function(offerResp) {
+                var offer = (!offerResp.error && offerResp.data) ? offerResp.data : null;
+                
+                var discount = 0;
+                var badgeHtml = "";
+                var countdownHtml = "";
+                var priceHtml = "<div class=\"detail-price\">$" + parseFloat(p.price).toFixed(2) + "</div>";
+                var isOffertxt = "";
+
+                if (offer) {
+                    isOffertxt = "%20en%20oferta";
+                    if (offer.original_price && offer.sale_price && offer.original_price > offer.sale_price) {
+                        discount = Math.round(((offer.original_price - offer.sale_price) / offer.original_price) * 100);
+                    }
+                    if (discount > 0) {
+                        badgeHtml = "<div class=\"discount-badge\">-" + discount + "%</div>";
+                    }
+                    priceHtml = "<div class=\"price-wrap\">" +
+                                "<span class=\"detail-old-price\">$" + parseFloat(offer.original_price).toFixed(2) + "</span>" +
+                                "<span class=\"detail-price is-offer\">$" + parseFloat(offer.sale_price).toFixed(2) + "</span>" +
+                                "</div>";
+                    
+                    if (offer.expiry) {
+                        countdownHtml = "<div class=\"offer-countdown\" id=\"detailCountdown\" data-expiry=\"" + offer.expiry + "\"></div>";
+                    }
+                }
+
+                var specsHtml = "<div class=\"detail-specs\">";
+                if (p.brand) specsHtml += "<div class=\"spec-row\"><span class=\"spec-label\">Marca</span><span class=\"spec-value\">" + p.brand + "</span></div>";
+                if (p.model) specsHtml += "<div class=\"spec-row\"><span class=\"spec-label\">Modelo</span><span class=\"spec-value\">" + p.model + "</span></div>";
+                if (p.condition) specsHtml += "<div class=\"spec-row\"><span class=\"spec-label\">Condición</span><span class=\"spec-value\">" + p.condition + "</span></div>";
+                specsHtml += "</div>";
+
+                var imgHtml = p.image 
+                    ? "<img src=\"" + p.image + "\" alt=\"" + p.name + "\" id=\"mainProductImg\">" + badgeHtml
+                    : "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" style=\"width:64px;height:64px;stroke:#93c5fd\"><rect x=\"2\" y=\"4\" width=\"20\" height=\"16\" rx=\"2\"/><path d=\"M8 2v4M16 2v4M6 12h12\"/></svg>" + badgeHtml;
+
+                // Construir miniaturas si hay imágenes extra
+                var allImgs = [p.image, p.image_2, p.image_3, p.image_4].filter(Boolean);
+                var thumbsHtml = "";
+                if (allImgs.length > 1) {
+                    thumbsHtml = "<div class=\"gallery-thumbs\">"
+                        + allImgs.map(function(url, i) {
+                            return "<div class=\"gallery-thumb" + (i === 0 ? " active" : "") + "\" data-src=\"" + url + "\">"
+                                + "<img src=\"" + url + "\" alt=\"\">"
+                                + "</div>";
+                        }).join("")
+                        + "</div>";
+                }
+
+                var html = "<div class=\"detail-card\">"
+                    + "<div class=\"detail-gallery\"><div class=\"main-img-wrap\">" + imgHtml + "</div>" + thumbsHtml + "</div>"
+                    + "<div class=\"detail-info\">"
+                    + "<span class=\"detail-cat\">" + (p.category || "") + "</span>"
+                    + "<h1 class=\"detail-title\">" + p.name + "</h1>"
+                    + countdownHtml
+                    + priceHtml
+                    + "<p class=\"detail-desc\">" + (p.description || "") + "</p>"
+                    + specsHtml
+                    + "<button class=\"detail-btn\" id=\"waBtn\">"
+                    + "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z\"/></svg>"
+                    + "Consultar por WhatsApp</button>"
+                    + "<br><a href=\"tienda.html\" class=\"detail-back\">&larr; Volver a la Tienda</a>"
+                    + "</div></div>";
+
+                container.innerHTML = html;
+
+                // Lógica de miniaturas de galería
+                var mainImg = document.getElementById("mainProductImg");
+                if (mainImg) {
+                    document.querySelectorAll(".gallery-thumb").forEach(function(thumb) {
+                        thumb.addEventListener("click", function() {
+                            var src = this.getAttribute("data-src");
+                            if (mainImg.src === src || mainImg.src.endsWith(src)) return;
+                            // Fade out
+                            mainImg.classList.add("img-fade");
+                            setTimeout(function() {
+                                mainImg.src = src;
+                                mainImg.onload = function() {
+                                    mainImg.classList.remove("img-fade");
+                                };
+                            }, 200);
+                            // Actualizar miniatura activa
+                            document.querySelectorAll(".gallery-thumb").forEach(function(t) { t.classList.remove("active"); });
+                            thumb.classList.add("active");
+                        });
+                    });
+                }
+
+                var pname = p.name;
+                document.getElementById("waBtn").addEventListener("click", function() {
+                    window.open("https://wa.me/584243532288?text=Hola,%20me%20interesa%20" + encodeURIComponent(pname) + isOffertxt, "_blank");
+                });
+
+                // Lógica del temporizador
+                if (offer && offer.expiry) {
+                    function updateTimer() {
+                        var el = document.getElementById("detailCountdown");
+                        if (!el) return;
+                        if (el.classList.contains("expired")) return; 
+                        var exp = el.getAttribute("data-expiry");
+                        var d = new Date(exp).getTime();
+                        var now = new Date().getTime();
+                        var diff = d - now;
+
+                        if (diff <= 0) {
+                            el.innerHTML = "⏱ Oferta expirada";
+                            el.classList.add("expired");
+                        } else {
+                            var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                            var hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            var mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                            var secs = Math.floor((diff % (1000 * 60)) / 1000);
+                            el.innerHTML = "⏱ Termina en: " + days + "d " + hours + "h " + mins + "m " + secs + "s";
+                        }
+                    }
+                    updateTimer();
+                    setInterval(updateTimer, 1000);
+                }
+
+                // ════ IDEA #4: PRODUCTOS RELACIONADOS ════
+                if (p.category) {
+                    supabase.from("productos")
+                        .select("id,name,price,image")
+                        .eq("category", p.category)
+                        .neq("id", p.id)
+                        .limit(4)
+                        .then(function(relResp) {
+                            if (relResp.error || !relResp.data || relResp.data.length === 0) return;
+
+                            var relProducts = relResp.data;
+                            var relIds = relProducts.map(function(rp) { return rp.id; });
+
+                            supabase.from("ofertas").select("*").in("product_id", relIds).then(function(offResp) {
+                                var offersMap = {};
+                                if (!offResp.error && offResp.data) {
+                                    offResp.data.forEach(function(o) {
+                                        var now = new Date().getTime();
+                                        var exp = o.expiry ? new Date(o.expiry).getTime() : Infinity;
+                                        if (exp > now) offersMap[o.product_id] = o;
+                                    });
+                                }
+
+                                var relSection = document.createElement("div");
+                                relSection.className = "related-section";
+
+                                var relHeading = document.createElement("h2");
+                                relHeading.className = "related-heading";
+                                relHeading.textContent = "También te puede interesar";
+                                relSection.appendChild(relHeading);
+
+                                var relGrid = document.createElement("div");
+                                relGrid.className = "related-grid";
+
+                                relProducts.forEach(function(rp) {
+                                    var card = document.createElement("div");
+                                    card.className = "related-card";
+
+                                    var rpOffer = offersMap[rp.id] || null;
+                                    var rpBadge = "";
+                                    var rpPriceHtml = "<div class=\"related-price\">$" + parseFloat(rp.price).toFixed(2) + "</div>";
+
+                                    if (rpOffer) {
+                                        var rpDiscount = 0;
+                                        if (rpOffer.original_price && rpOffer.sale_price && rpOffer.original_price > rpOffer.sale_price) {
+                                            rpDiscount = Math.round(((rpOffer.original_price - rpOffer.sale_price) / rpOffer.original_price) * 100);
+                                        }
+                                        if (rpDiscount > 0) rpBadge = "<div class=\"related-badge\">-" + rpDiscount + "%</div>";
+                                        rpPriceHtml = "<div style=\"display:flex;align-items:center;gap:6px;flex-wrap:wrap\">"
+                                            + "<span style=\"font-size:0.78rem;color:#9ca3af;text-decoration:line-through;font-weight:600\">$" + parseFloat(rpOffer.original_price).toFixed(2) + "</span>"
+                                            + "<span class=\"related-price\" style=\"color:#dc2626\">$" + parseFloat(rpOffer.sale_price).toFixed(2) + "</span>"
+                                            + "</div>";
+                                    }
+
+                                    var rpImgHtml = rp.image
+                                        ? "<div class=\"related-img-wrap\">" + rpBadge + "<img src=\"" + rp.image + "\" alt=\"" + rp.name + "\"></div>"
+                                        : "<div class=\"related-img-wrap\"><div style=\"width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--blue-50);border-radius:10px\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" style=\"width:32px;height:32px;stroke:#93c5fd\"><rect x=\"2\" y=\"4\" width=\"20\" height=\"16\" rx=\"2\"/><path d=\"M8 2v4M16 2v4M6 12h12\"/></svg></div></div>";
+
+                                    card.innerHTML = rpImgHtml
+                                        + "<div class=\"related-info\">"
+                                        + "<div class=\"related-name\">" + rp.name + "</div>"
+                                        + rpPriceHtml
+                                        + "</div>";
+
+                                    card.addEventListener("click", function() {
+                                        document.body.classList.remove("pg-in");
+                                        setTimeout(function() { window.location.href = "detalle.html?id=" + rp.id; }, 300);
+                                    });
+
+                                    relGrid.appendChild(card);
+                                });
+
+                                relSection.appendChild(relGrid);
+                                container.appendChild(relSection);
+                            });
+                        });
+                }
+            });
+        });
+    }
+
+    /* PAGE FADE IN */
     requestAnimationFrame(function() {
         requestAnimationFrame(function() { document.body.classList.add("pg-in"); });
     });
 
-    
+    /* PAGE FADE OUT on navigation */
     document.addEventListener("click", function(e) {
         var a = e.target.closest("a[href]");
         if (!a) return;
@@ -366,95 +725,6 @@
         var dest = h;
         setTimeout(function() { window.location.href = dest; }, 300);
     });
-
-    
-    function capitalize(str) {
-        if (!str) return "";
-        return str.charAt(0).toUpperCase() + str.slice(1);
-    }
-
-    var params    = new URLSearchParams(window.location.search);
-    var id        = params.get("id");
-    var container = document.getElementById("detailContent");
-
-    function showNotFound() {
-        container.innerHTML =
-            "<div class=\"detail-notfound detail-reveal\">"
-            + "<h2>Producto no encontrado</h2>"
-            + "<p>El producto que buscas no existe o ha sido eliminado.</p>"
-            + "<a href=\"tienda.html\">Ver Cat&aacute;logo</a>"
-            + "</div>";
-        requestAnimationFrame(function() {
-            requestAnimationFrame(function() {
-                var el = container.querySelector(".detail-reveal");
-                if (el) el.classList.add("on");
-            });
-        });
-    }
-
-    if (!id) {
-        showNotFound();
-    } else {
-        supabase.from("productos").select("*").eq("id", id).single().then(function(resp) {
-            if (resp.error || !resp.data) { showNotFound(); return; }
-            var p = resp.data;
-
-            document.getElementById("breadcrumbName").textContent = p.name;
-            document.title = p.name + " - La Nueva Comercial CESAR";
-
-            var imgHtml = p.image
-                ? "<img src=\"" + p.image + "\" alt=\"" + p.name + "\" loading=\"eager\" style=\"width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:14px;display:block\">"
-                : "<div style=\"width:100%;aspect-ratio:1/1;background:var(--blue-50);border-radius:14px;display:flex;align-items:center;justify-content:center\"><svg viewBox=\"0 0 24 24\" width=\"64\" height=\"64\" fill=\"none\" stroke=\"var(--blue-300)\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"2\" y=\"4\" width=\"20\" height=\"16\" rx=\"2\"/><path d=\"M8 2v4M16 2v4M6 12h12\"/></svg></div>";
-
-            
-            var specs = p.specs || {};
-            if (typeof specs === "string") { try { specs = JSON.parse(specs); } catch(e) { specs = {}; } }
-            var keys = Object.keys(specs);
-            var specsHtml = "";
-            if (keys.length) {
-                specsHtml += "<div class=\"detail-specs\">";
-                specsHtml += "<div class=\"detail-specs-title\">Especificaciones T&eacute;cnicas</div>";
-                specsHtml += "<table>";
-                keys.forEach(function(k) {
-                    specsHtml += "<tr><td>" + k + "</td><td>" + specs[k] + "</td></tr>";
-                });
-                specsHtml += "</table></div>";
-            }
-
-            
-            var html =
-                "<div class=\"detail-grid\">"
-                + "<div class=\"detail-image detail-reveal\">" + imgHtml + "</div>"
-                + "<div class=\"detail-reveal\" style=\"transition-delay:0.12s\">"
-                + "<div class=\"detail-category\">" + capitalize(p.category) + "</div>"
-                + "<h1 class=\"detail-title\">" + p.name + "</h1>"
-                + "<div class=\"detail-price\">$" + p.price + "</div>"
-                + "<p class=\"detail-desc\">" + (p.description || "") + "</p>"
-                + specsHtml
-                + "<button class=\"detail-btn\" id=\"waBtn\">"
-                + "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z\"/></svg>"
-                + "Consultar por WhatsApp</button>"
-                + "<br><a href=\"tienda.html\" class=\"detail-back\">&larr; Volver a la Tienda</a>"
-                + "</div></div>";
-
-            container.innerHTML = html;
-
-            
-            var pname = p.name;
-            document.getElementById("waBtn").addEventListener("click", function() {
-                window.open("https://wa.me/584243532288?text=" + encodeURIComponent("Hola, me interesa " + pname), "_blank");
-            });
-
-            
-            requestAnimationFrame(function() {
-                requestAnimationFrame(function() {
-                    container.querySelectorAll(".detail-reveal").forEach(function(el) {
-                        el.classList.add("on");
-                    });
-                });
-            });
-        });
-    }
 </script>
 </body>
 </html>
