@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -56,11 +56,29 @@
             display: flex; align-items: center; justify-content: center;
         }
         .nav-inner {
-            width: 100%; max-width: 860px; padding: 0 24px;
-            display: flex; align-items: center;
+            width: 100%; max-width: 960px; padding: 0 24px;
+            display: flex; align-items: center; gap: 16px;
+        }
+        .nav-logo {
+            display: flex; align-items: center; gap: 10px;
+            text-decoration: none; flex-shrink: 0;
+        }
+        .nav-logo svg { display: block; }
+        .nav-logo-text { display: flex; flex-direction: column; line-height: 1.15; }
+        .nav-logo-sub {
+            font-size: 8px; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 1px; color: var(--text-muted);
+        }
+        .nav-logo-main {
+            font-size: 16px; font-weight: 800; letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        @media (max-width: 480px) {
+            .nav-logo-text { display: none; }
         }
 
-    
+        /* Barra de búsqueda inline */
         .nav-search-wrap {
             flex: 1; display: flex; align-items: center;
             background: white; border: 1.5px solid #e2e8f0;
@@ -96,7 +114,7 @@
         .nav-search-btn:hover { background: var(--blue-800); }
         .nav-search-btn svg { width: 17px; height: 17px; stroke: white; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 
-        
+        /* Resultados debajo de la barra */
         .search-modal-results {
             position: absolute; top: calc(100% + 8px); left: 0; right: 0;
             background: white; border-radius: 14px; overflow: hidden;
@@ -175,35 +193,50 @@
             line-height: 1.6;
         }
 
-        .categories-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
+        /* ── BARRA CATEGORÍAS ── */
+        .cat-bar {
+            display: flex; justify-content: center; align-items: flex-start;
+            gap: 4px; flex-wrap: nowrap; overflow-x: auto;
+            padding: 8px 0 4px; scrollbar-width: none;
         }
-        .category-card {
-            background: var(--bg-white); border-radius: var(--radius);
-            padding: 32px 24px; text-align: center;
-            border: 1px solid rgba(0,0,0,0.04);
-            box-shadow: var(--shadow-sm); cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
+        .cat-bar::-webkit-scrollbar { display: none; }
+        .cat-item {
+            display: flex; flex-direction: column; align-items: center;
+            gap: 10px; cursor: pointer; padding: 14px 16px;
+            border-radius: 16px; flex-shrink: 0;
+            transition: background 0.2s;
+            opacity: 0; transform: translateY(14px);
+            animation: catIn 0.38s ease forwards;
+            min-width: 88px; max-width: 116px;
         }
-        .category-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-md);
+        .cat-item:hover { background: var(--blue-50); }
+        .cat-item:hover .cat-img-wrap img { transform: scale(1.1) translateY(-3px); }
+        .cat-item:nth-child(1) { animation-delay: 0.06s; }
+        .cat-item:nth-child(2) { animation-delay: 0.14s; }
+        .cat-item:nth-child(3) { animation-delay: 0.22s; }
+        .cat-item:nth-child(4) { animation-delay: 0.30s; }
+        @keyframes catIn { to { opacity: 1; transform: translateY(0); } }
+        .cat-img-wrap { width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; }
+        .cat-img-wrap img { width: 80px; height: 80px; object-fit: contain; transition: transform 0.22s ease; }
+        .cat-label { font-size: 0.78rem; font-weight: 600; color: var(--text-main); text-align: center; line-height: 1.3; }
+        /* skeleton */
+        .cat-skeleton { display: flex; justify-content: center; gap: 4px; padding: 8px 0 4px; }
+        .cat-skel-item { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 14px 16px; min-width: 88px; }
+        .skel-circle { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
+        .skel-line { height: 10px; border-radius: 5px; background: linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; width: 68px; }
+        .skel-line.short { width: 48px; margin-top: 3px; }
+        @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+        @media (max-width: 768px) {
+            .cat-item { padding: 10px 10px; min-width: 74px; }
+            .cat-img-wrap, .cat-img-wrap img { width: 64px; height: 64px; }
+            .cat-label { font-size: 0.71rem; }
+            .skel-circle { width: 64px; height: 64px; }
         }
-        .category-icon {
-            width: 56px; height: 56px; margin: 0 auto 18px;
-            background: var(--blue-50); border-radius: 14px;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .category-icon svg {
-            width: 28px; height: 28px; stroke: var(--blue-700); fill: none; stroke-width: 1.8;
-        }
-        .category-card h3 {
-            font-size: 1.15rem; font-weight: 700; margin-bottom: 8px; color: var(--text-main);
-        }
-        .category-card p {
-            font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;
+        @media (max-width: 480px) {
+            .cat-item { padding: 8px 7px; min-width: 64px; }
+            .cat-img-wrap, .cat-img-wrap img { width: 54px; height: 54px; }
+            .cat-label { font-size: 0.67rem; }
+            .skel-circle { width: 54px; height: 54px; }
         }
 
         .products-grid {
@@ -287,12 +320,6 @@
             .product-info p { font-size: 0.75rem; margin-bottom: 10px; }
             .product-info .price { font-size: 0.95rem; }
             .product-btn { font-size: 0.78rem; padding: 7px 0; margin-top: 10px; }
-            .categories-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-            .category-card { padding: 18px 12px; }
-            .category-icon { width: 40px; height: 40px; margin-bottom: 10px; }
-            .category-icon svg { width: 20px; height: 20px; stroke-width: 1.6; }
-            .category-card h3 { font-size: 0.9rem; }
-            .category-card p { font-size: 0.78rem; }
         }
         @media (max-width: 400px) {
             .products-grid { gap: 8px; }
@@ -304,64 +331,95 @@
             .product-info p { font-size: 0.7rem; margin-bottom: 6px; }
             .product-info .price { font-size: 0.85rem; }
             .product-btn { font-size: 0.72rem; padding: 6px 0; }
-            .categories-grid { gap: 8px; }
-            .category-card { padding: 14px 10px; }
-            .category-icon { width: 36px; height: 36px; margin-bottom: 8px; }
-            .category-icon svg { width: 18px; height: 18px; }
-            .category-card h3 { font-size: 0.82rem; }
-            .category-card p { font-size: 0.72rem; }
         }
 
         .contact-section {
             background: linear-gradient(135deg, var(--blue-900), var(--blue-800));
             padding: 80px 24px; text-align: center; color: white;
         }
-        @media (max-width: 768px) {
-            .contact-section { padding: 36px 16px; }
-            .contact-section h2 { font-size: 1.4rem; margin-bottom: 8px; }
-            .contact-section p { font-size: 0.82rem; margin-bottom: 20px; }
-            .contact-grid { gap: 12px; }
-            .contact-card { padding: 14px 16px; min-width: 140px; max-width: 260px; gap: 6px; }
-            .contact-card svg { width: 22px; height: 22px; }
-            .contact-card span { font-size: 0.82rem; }
-        }
-        @media (max-width: 480px) {
-            .contact-section { padding: 24px 12px; }
-            .contact-section h2 { font-size: 1.15rem; }
-            .contact-section p { font-size: 0.75rem; margin-bottom: 14px; }
-            .contact-grid { gap: 8px; }
-            .contact-card { padding: 10px 12px; min-width: 100px; max-width: 100%; gap: 4px; }
-            .contact-card svg { width: 18px; height: 18px; }
-            .contact-card span { font-size: 0.72rem; }
-        }
         .contact-section h2 {
             font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 800;
             margin-bottom: 12px; letter-spacing: -0.5px;
         }
         .contact-section p {
-            color: rgba(255,255,255,0.7); font-size: 1.05rem; margin-bottom: 40px;
+            color: rgba(255,255,255,0.7); font-size: 1.05rem; margin-bottom: 48px;
         }
-        .contact-grid {
-            display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;
-            max-width: 700px; margin: 0 auto;
+
+        /* ── Fila única horizontal ── */
+        .contact-row {
+            display: flex; justify-content: center; align-items: flex-start;
+            gap: 0; flex-wrap: wrap; max-width: 960px; margin: 0 auto;
         }
+
+        /* ── Cada grupo ── */
+        .contact-group {
+            display: flex; flex-direction: column; align-items: center;
+            gap: 14px; padding: 0 40px;
+        }
+        .contact-group-label {
+            font-size: 0.65rem; font-weight: 700; letter-spacing: 2px;
+            text-transform: uppercase; color: rgba(255,255,255,0.38);
+        }
+        .contact-group-cards { display: flex; gap: 14px; flex-wrap: nowrap; }
+
+        /* ── Separador vertical ── */
+        .contact-divider {
+            width: 1px; background: rgba(255,255,255,0.13); align-self: stretch;
+            min-height: 110px; margin-top: 24px;
+        }
+
+        /* ── Tarjeta ── */
         .contact-card {
-            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15);
-            border-radius: var(--radius); padding: 20px 24px; min-width: 160px;
-            backdrop-filter: blur(8px); text-decoration: none; color: white;
-            transition: background 0.3s, transform 0.3s;
-            display: flex; flex-direction: column; align-items: center; gap: 8px;
+            background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.13);
+            border-radius: 16px; padding: 20px 22px; min-width: 128px;
+            backdrop-filter: blur(10px); text-decoration: none; color: white;
+            transition: background 0.25s, transform 0.25s, border-color 0.25s;
+            display: flex; flex-direction: column; align-items: center; gap: 12px;
         }
-        .contact-card:hover { background: rgba(255,255,255,0.18); transform: translateY(-3px); }
-        .contact-card svg { width: 24px; height: 24px; stroke: white; fill: none; stroke-width: 1.8; }
-        .contact-card span { font-size: 0.88rem; font-weight: 500; }
+        .contact-card:hover {
+            background: rgba(255,255,255,0.14);
+            border-color: rgba(255,255,255,0.28);
+            transform: translateY(-5px);
+        }
+        .contact-card .c-icon {
+            width: 40px; height: 40px; opacity: 0.92;
+        }
+        .contact-card .c-sub {
+            font-size: 0.64rem; font-weight: 400; color: rgba(255,255,255,0.5);
+            text-align: center; line-height: 1.4; margin-bottom: -6px;
+        }
+        .contact-card .c-name {
+            font-size: 0.82rem; font-weight: 600; text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .contact-section { padding: 48px 16px; }
+            .contact-section h2 { font-size: 1.6rem; }
+            .contact-section p { font-size: 0.88rem; margin-bottom: 32px; }
+            .contact-row { flex-wrap: nowrap; gap: 0; justify-content: center; }
+            .contact-group { padding: 0 14px; gap: 10px; }
+            .contact-group-cards { gap: 10px; }
+            .contact-divider { min-height: 90px; margin-top: 20px; }
+            .contact-card { min-width: 72px; padding: 12px 10px; gap: 8px; border-radius: 12px; }
+            .contact-card .c-icon { width: 26px; height: 26px; }
+            .contact-card .c-name { font-size: 0.68rem; }
+            .contact-card .c-sub { font-size: 0.56rem; }
+        }
+        @media (max-width: 400px) {
+            .contact-group { padding: 0 8px; }
+            .contact-group-cards { gap: 8px; }
+            .contact-card { min-width: 62px; padding: 10px 8px; gap: 6px; }
+            .contact-card .c-icon { width: 22px; height: 22px; }
+            .contact-card .c-name { font-size: 0.62rem; }
+            .contact-card .c-sub { font-size: 0.52rem; }
+        }
 
         footer {
             background: #0f172a; padding: 40px 24px 24px; color: rgba(255,255,255,0.6);
         }
         .footer-inner {
             max-width: 1200px; margin: 0 auto;
-            display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px;
+            display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 40px;
         }
         .footer-brand .nav-logo-main { font-size: 22px; }
         .footer-brand p { font-size: 0.9rem; line-height: 1.6; margin-top: 12px; }
@@ -375,15 +433,21 @@
         }
 
         @media (max-width: 768px) {
-            .footer-inner { grid-template-columns: 1fr 1fr; gap: 24px; }
+            .footer-inner {
+                grid-template-columns: 1fr 1fr;
+                gap: 28px 20px;
+            }
             .footer-brand { grid-column: 1 / -1; }
-            .footer-col h4 { font-size: 0.78rem; }
-            .footer-col a { font-size: 0.8rem; }
-            .contact-grid { flex-direction: column; align-items: center; }
-            .contact-card { padding: 20px 24px; min-width: 160px; width: 100%; max-width: 300px; }
+            .footer-col h4 { font-size: 0.75rem; margin-bottom: 10px; }
+            .footer-col a { font-size: 0.78rem; margin-bottom: 8px; }
+            .footer-bottom { font-size: 0.75rem; }
+        }
+        @media (max-width: 400px) {
+            footer { padding: 32px 16px 20px; }
+            .footer-inner { gap: 22px 16px; }
         }
 
-        
+        /* ===== OFERTAS ===== */
         .offers-scroll-wrap {
             position: relative;
         }
@@ -410,7 +474,7 @@
         .offers-arrow-left { left: -12px; }
         .offers-arrow-right { right: -12px; }
 
-        
+        /* CSS updates for Offer Card */
         .offer-card {
             background: #ffffff; border-radius: 12px;
             overflow: hidden; border: 1px solid #e5e7eb;
@@ -479,9 +543,208 @@
             .offer-countdown { font-size: 0.58rem; }
         }
     
-        
-        .carousel-wrap { max-width: 780px; margin: 0 auto; padding: 88px 24px 0; }
-        @media (max-width: 768px) { .carousel-wrap { padding: 72px 16px 0; } }
+        /* ===== HERO LAYOUT (carousel + widgets) ===== */
+        .hero-layout {
+            max-width: 1100px; margin: 0 auto;
+            padding: 88px 24px 0;
+            display: grid;
+            grid-template-columns: 1fr 220px;
+            gap: 20px; align-items: start;
+        }
+        @media (max-width: 1000px) {
+            .hero-layout { grid-template-columns: 1fr 200px; gap: 14px; }
+        }
+        @media (max-width: 860px) {
+            .hero-layout {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto;
+                padding: 72px 16px 0; gap: 12px;
+            }
+            .carousel-wrap     { order: 1; }
+            .hero-widget-right { order: 2; }
+        }
+
+        /* ===== WIDGETS ===== */
+        .hero-widget { display: flex; flex-direction: column; gap: 12px; }
+        .widget-card {
+            background: white; border: 1px solid #e8eef5;
+            border-radius: 16px; padding: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        }
+        .widget-label {
+            font-size: 9px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1.5px; color: #94a3b8; margin-bottom: 12px;
+        }
+
+        /* ── Formas de pago ── */
+        .payment-method {
+            display: flex; align-items: center; gap: 10px;
+            padding: 8px 10px; border-radius: 10px;
+            margin-bottom: 6px; transition: background 0.2s;
+        }
+        .payment-method:last-child { margin-bottom: 0; }
+        .payment-method:hover { background: #f8fafc; }
+        .payment-dot {
+            width: 32px; height: 32px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .payment-info { flex: 1; min-width: 0; }
+        .payment-name { font-size: 11px; font-weight: 600; color: #1e293b; }
+        .payment-sub  { font-size: 10px; color: #94a3b8; margin-top: 1px; }
+
+        /* ── Acordeón móvil para formas de pago ── */
+        .payment-accordion-btn {
+            display: none; width: 100%; background: none; border: none;
+            padding: 0; cursor: pointer; text-align: left;
+        }
+        .payment-accordion-inner {
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .payment-accordion-label {
+            font-size: 13px; font-weight: 600; color: #1e293b;
+        }
+        .payment-accordion-chips {
+            display: flex; gap: 5px; flex-wrap: wrap; margin-top: 8px;
+        }
+        .payment-chip {
+            font-size: 10px; font-weight: 600; padding: 3px 8px;
+            border-radius: 20px; background: #eff6ff; color: #2563eb;
+        }
+        .payment-accordion-arrow {
+            width: 20px; height: 20px; transition: transform 0.3s;
+            stroke: #94a3b8; fill: none; stroke-width: 2.5;
+            stroke-linecap: round; flex-shrink: 0;
+        }
+        .payment-accordion-btn.open .payment-accordion-arrow {
+            transform: rotate(180deg);
+        }
+        .payment-list {
+            transition: max-height 0.35s cubic-bezier(.4,0,.2,1), opacity 0.3s;
+            overflow: hidden;
+        }
+
+        @media (max-width: 860px) {
+            .payment-accordion-btn { display: block; margin-bottom: 0; }
+            .widget-label { display: none; }
+            .payment-list { max-height: 0; opacity: 0; }
+            .payment-list.open { max-height: 400px; opacity: 1; margin-top: 10px; }
+        }
+
+        /* ── Producto del día ── */
+        .prod-day-img {
+            width: 100%; aspect-ratio: 1; border-radius: 10px;
+            overflow: hidden; background: #eff6ff; margin-bottom: 10px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .prod-day-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .prod-day-cat {
+            font-size: 9px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1px; color: #2563eb; margin-bottom: 4px;
+        }
+        .prod-day-name {
+            font-size: 12px; font-weight: 700; color: #0f172a;
+            line-height: 1.3; margin-bottom: 6px;
+        }
+        .prod-day-price {
+            font-size: 15px; font-weight: 800; color: #2563eb; margin-bottom: 10px;
+        }
+        .prod-day-btn {
+            display: block; width: 100%; padding: 8px; text-align: center;
+            background: #2563eb; color: white; border-radius: 8px;
+            font-size: 11px; font-weight: 600; text-decoration: none;
+            border: none; cursor: pointer; transition: background 0.2s;
+        }
+        .prod-day-btn:hover { background: #1d4ed8; }
+        .prod-day-skel { animation: pulse 1.5s ease-in-out infinite; }
+        .prod-day-skel .skel-box { background: #e2e8f0; border-radius: 8px; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        /* ── Producto del día en móvil: layout horizontal ── */
+        @media (max-width: 860px) {
+            #prodDayCard { padding: 14px; }
+            #prodDayCard .widget-label { display: block; margin-bottom: 10px; }
+            #prodDayContent { display: flex !important; gap: 12px; align-items: center; }
+            .prod-day-img {
+                width: 80px; height: 80px; aspect-ratio: unset;
+                flex-shrink: 0; margin-bottom: 0;
+            }
+            .prod-day-info { flex: 1; min-width: 0; }
+            .prod-day-name { font-size: 12px; margin-bottom: 3px; }
+            .prod-day-price { font-size: 14px; margin-bottom: 6px; }
+            .prod-day-btn { font-size: 11px; padding: 7px 10px; width: auto; display: inline-block; }
+        }
+
+        /* ===== NUEVOS INGRESOS ===== */
+        .nuevos-section {
+            max-width: 1100px; margin: 0 auto; padding: 32px 24px 0;
+        }
+        .nuevos-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        .nuevos-title {
+            display: flex; align-items: center; gap: 8px;
+            font-size: 1rem; font-weight: 700; color: var(--text-main);
+        }
+        .nuevos-title svg { width: 18px; height: 18px; stroke: var(--blue-600); fill: none; stroke-width: 2; }
+        .nuevos-badge {
+            font-size: 10px; font-weight: 700; padding: 2px 8px;
+            border-radius: 20px; background: var(--blue-50); color: var(--blue-700);
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .nuevos-link {
+            font-size: 12px; color: var(--blue-600); text-decoration: none; font-weight: 500;
+        }
+        .nuevos-link:hover { text-decoration: underline; }
+        .nuevos-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 14px;
+        }
+        .nuevo-card {
+            background: white; border: 1px solid #e8eef5; border-radius: 14px;
+            overflow: hidden; cursor: pointer; text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        }
+        .nuevo-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.09); }
+        .nuevo-img {
+            width: 100%; aspect-ratio: 1; background: #f8fafc;
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
+        }
+        .nuevo-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .nuevo-img svg { width: 36px; height: 36px; stroke: #cbd5e1; fill: none; stroke-width: 1.5; }
+        .nuevo-body { padding: 10px 12px 12px; }
+        .nuevo-cat {
+            font-size: 9px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1px; color: var(--blue-600); margin-bottom: 3px;
+        }
+        .nuevo-name {
+            font-size: 12px; font-weight: 600; color: #0f172a;
+            line-height: 1.3; margin-bottom: 5px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .nuevo-price { font-size: 13px; font-weight: 700; color: var(--blue-700); }
+        .nuevo-skel { animation: pulse 1.5s ease-in-out infinite; }
+        .nuevo-skel .sk { background: #e8eef5; border-radius: 6px; }
+
+        @media (max-width: 860px) {
+            .nuevos-section { padding: 24px 16px 0; }
+            .nuevos-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+            .nuevo-body { padding: 6px 8px 8px; }
+            .nuevo-cat { font-size: 8px; }
+            .nuevo-name { font-size: 10px; }
+            .nuevo-price { font-size: 11px; }
+        }
+        @media (max-width: 400px) {
+            .nuevos-grid { gap: 8px; }
+            .nuevo-body { padding: 8px 10px 10px; }
+        }
+
+        /* ===== CAROUSEL BANNERS ===== */
+        .carousel-wrap { width: 100%; }
+        @media (max-width: 860px) { .carousel-wrap { padding: 0; } }
         .carousel-slider {
             position: relative; width: 100%;
             border-radius: 14px; overflow: hidden;
@@ -520,11 +783,11 @@
         .carousel-arrow-right { right: 12px; }
 
     
-        
+        /* ─── PAGE TRANSITION ─── */
         body { opacity: 0; transition: opacity 0.32s ease; }
         body.pg-in { opacity: 1; }
 
-        
+        /* ─── SHIMMER SKELETON ─── */
         @keyframes shimmer {
             0%   { background-position: -600px 0; }
             100% { background-position:  600px 0; }
@@ -547,7 +810,7 @@
         @media (max-width:768px) { .skel-offer { flex:0 0 200px; } .skel-offer-img { height: 130px; } }
         @media (max-width:400px) { .skel-offer { flex:0 0 170px; } .skel-offer-img { height: 110px; } }
 
-        
+        /* ─── REVEAL ON SCROLL ─── */
         .reveal {
             opacity: 0;
             transform: translateY(26px);
@@ -555,7 +818,7 @@
         }
         .reveal.on { opacity:1; transform:translateY(0); }
 
-        
+        /* ════ SEARCH (inline nav) ════ */
 
     </style>
 </head>
@@ -563,6 +826,25 @@
 
     <nav>
         <div class="nav-inner">
+            <a href="index.html" class="nav-logo">
+                <svg width="36" height="36" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="40" height="40" rx="10" fill="#1d4ed8"/>
+                    <rect x="7" y="9" width="11" height="20" rx="1.5" stroke="white" stroke-width="1.8"/>
+                    <line x1="7" y1="18" x2="18" y2="18" stroke="white" stroke-width="1.2" opacity="0.6"/>
+                    <line x1="10" y1="13" x2="10" y2="16" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+                    <line x1="10" y1="21" x2="10" y2="25" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+                    <rect x="21" y="9" width="13" height="9" rx="1.5" stroke="white" stroke-width="1.8"/>
+                    <rect x="23" y="11" width="9" height="5" rx="0.5" fill="white" fill-opacity="0.25"/>
+                    <line x1="26" y1="18" x2="28" y2="18" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+                    <rect x="21" y="21" width="13" height="9" rx="1.5" stroke="white" stroke-width="1.8"/>
+                    <circle cx="27" cy="25" r="3" stroke="white" stroke-width="1.5"/>
+                    <circle cx="27" cy="25" r="1" fill="white" opacity="0.7"/>
+                </svg>
+                <div class="nav-logo-text">
+                    <span class="nav-logo-sub">La Nueva Comercial</span>
+                    <span class="nav-logo-main">CESAR</span>
+                </div>
+            </a>
             <div class="nav-search-wrap">
                 <button class="nav-search-category" type="button">
                     Categorías
@@ -577,84 +859,132 @@
         </div>
     </nav>
 
-    <div class="carousel-wrap">
-        <div class="carousel-slider" id="carouselSlider">
-            <div class="skel skel-banner" id="bnrSkel" style="position:absolute;inset:0;z-index:1;border-radius:0"></div>
-            <button class="carousel-arrow carousel-arrow-left" id="carouselPrev">
-                <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-            </button>
-            <button class="carousel-arrow carousel-arrow-right" id="carouselNext">
-                <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-            </button>
-            <div class="carousel-dots" id="carouselDots"></div>
+    <div class="hero-layout">
+
+        <!-- ═══ CAROUSEL (izquierda, ahora más ancho) ═══ -->
+        <div class="carousel-wrap">
+            <div class="carousel-slider" id="carouselSlider">
+                <div class="skel skel-banner" id="bnrSkel" style="position:absolute;inset:0;z-index:1;border-radius:0"></div>
+                <button class="carousel-arrow carousel-arrow-left" id="carouselPrev">
+                    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+                </button>
+                <button class="carousel-arrow carousel-arrow-right" id="carouselNext">
+                    <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+                <div class="carousel-dots" id="carouselDots"></div>
+            </div>
         </div>
+
+        <!-- ═══ WIDGET DERECHO: Producto del día ═══ -->
+        <div class="hero-widget hero-widget-right">
+            <div class="widget-card" id="prodDayCard">
+                <div class="widget-label">Producto del día</div>
+                <!-- skeleton -->
+                <div id="prodDaySkel" class="prod-day-skel">
+                    <div class="skel-box" style="width:100%;aspect-ratio:1;margin-bottom:10px;"></div>
+                    <div class="skel-box" style="height:10px;width:50%;margin-bottom:6px;"></div>
+                    <div class="skel-box" style="height:13px;width:80%;margin-bottom:6px;"></div>
+                    <div class="skel-box" style="height:16px;width:40%;margin-bottom:10px;"></div>
+                    <div class="skel-box" style="height:32px;width:100%;border-radius:8px;"></div>
+                </div>
+                <!-- contenido real -->
+                <div id="prodDayContent" style="display:none;">
+                    <div class="prod-day-img" id="prodDayImg"></div>
+                    <div class="prod-day-info">
+                        <div class="prod-day-cat" id="prodDayCat"></div>
+                        <div class="prod-day-name" id="prodDayName"></div>
+                        <div class="prod-day-price" id="prodDayPrice"></div>
+                        <a class="prod-day-btn" id="prodDayBtn">Ver producto →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <section class="section" id="categorias">
-        <div class="section-header">
-            <h2>Nuestras <span>Categorias</span></h2>
-            <p>Todo lo que necesitas para tu hogar en un solo lugar, con la mejor calidad y los mejores precios.</p>
+    <section class="section" id="categorias" style="padding-top: 32px; padding-bottom: 32px;">
+        <!-- skeleton mientras cargan las imágenes -->
+        <div class="cat-skeleton" id="catSkeleton">
+            <div class="cat-skel-item"><div class="skel-circle"></div><div class="skel-line"></div><div class="skel-line short"></div></div>
+            <div class="cat-skel-item"><div class="skel-circle"></div><div class="skel-line"></div><div class="skel-line short"></div></div>
+            <div class="cat-skel-item"><div class="skel-circle"></div><div class="skel-line"></div><div class="skel-line short"></div></div>
+            <div class="cat-skel-item"><div class="skel-circle"></div><div class="skel-line"></div><div class="skel-line short"></div></div>
         </div>
-        <div class="categories-grid">
-            <div class="category-card reveal">
-                <div class="category-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="2" y="2" width="20" height="20" rx="2"/>
-                        <rect x="2" y="2" width="20" height="4.5" rx="2"/>
-                        <rect x="14.5" y="3" width="5.5" height="2.5" rx="0.5"/>
-                        <circle cx="5.5" cy="4.2" r="0.8"/>
-                        <circle cx="8" cy="4.2" r="0.8"/>
-                        <circle cx="10.5" cy="4.2" r="0.8"/>
-                        <circle cx="12" cy="13" r="6"/>
-                        <circle cx="12" cy="13" r="4"/>
-                        <line x1="6.8" y1="13" x2="8.5" y2="13"/>
-                        <rect x="4" y="21.5" width="2" height="0.7" rx="0.3"/>
-                        <rect x="18" y="21.5" width="2" height="0.7" rx="0.3"/>
-                    </svg>
-                </div>
-                <h3>Electrodomesticos</h3>
-                <p>Neveras, cocinas, lavadoras, aires acondicionados y mas electrodomesticos para tu hogar.</p>
+        <!-- barra real -->
+        <div class="cat-bar" id="catBar" style="display:none;">
+            <div class="cat-item" onclick="window.location.href='tienda.html?categoria=electrodomesticos'">
+                <div class="cat-img-wrap"><img src="img/electrodomesticos.png" alt="Electrodomésticos" loading="lazy"></div>
+                <span class="cat-label">Electrodomésticos</span>
             </div>
-            <div class="category-card reveal">
-                <div class="category-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
-                    </svg>
-                </div>
-                <h3>Repuestos de Refrigeracion</h3>
-                <p>Compresores, termostatos, ventiladores y todo tipo de repuestos para refrigeracion.</p>
+            <div class="cat-item" onclick="window.location.href='tienda.html?categoria=repuestos-refrigeracion'">
+                <div class="cat-img-wrap"><img src="img/repuestos.png" alt="Repuestos de Refrigeración" loading="lazy"></div>
+                <span class="cat-label">Repuestos de Refrigeración</span>
             </div>
-            <div class="category-card reveal">
-                <div class="category-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="5" y="3" width="14" height="6" rx="1"/>
-                        <rect x="4" y="9" width="16" height="4" rx="1"/>
-                        <line x1="6" y1="13" x2="6" y2="21"/>
-                        <line x1="18" y1="13" x2="18" y2="21"/>
-                        <line x1="9" y1="13" x2="9" y2="21"/>
-                        <line x1="15" y1="13" x2="15" y2="21"/>
-                        <line x1="4" y1="21" x2="20" y2="21"/>
-                    </svg>
-                </div>
-                <h3>Plasticos</h3>
-                <p>Muebles, sillas, mesas, cestas y una amplia variedad de articulos plasticos para el hogar.</p>
+            <div class="cat-item" onclick="window.location.href='tienda.html?categoria=plasticos'">
+                <div class="cat-img-wrap"><img src="img/plasticos.png" alt="Plásticos" loading="lazy"></div>
+                <span class="cat-label">Plásticos</span>
             </div>
-            <div class="category-card reveal">
-                <div class="category-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="4" width="4" height="16" rx="1"/>
-                        <rect x="7" y="4" width="14" height="16" rx="1"/>
-                        <rect x="9" y="8" width="5" height="3" rx="0.5"/>
-                        <line x1="7" y1="14" x2="21" y2="14"/>
-                        <rect x="8" y="19.5" width="2" height="1.5" rx="0.3"/>
-                        <rect x="18" y="19.5" width="2" height="1.5" rx="0.3"/>
-                    </svg>
-                </div>
-                <h3>Camas y Colchones</h3>
-                <p>Camas de todos los tamanos, colchones ortopedicos, viscoelasticos y mucho mas.</p>
+            <div class="cat-item" onclick="window.location.href='tienda.html?categoria=camas-colchones'">
+                <div class="cat-img-wrap"><img src="img/camas.png" alt="Camas y Colchones" loading="lazy"></div>
+                <span class="cat-label">Camas y Colchones</span>
             </div>
         </div>
     </section>
+
+    <!-- ═══ NUEVOS INGRESOS ═══ -->
+    <div class="nuevos-section">
+        <div class="nuevos-header">
+            <div class="nuevos-title">
+                <svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+                Recién llegados
+                <span class="nuevos-badge">Nuevo</span>
+            </div>
+            <a href="tienda.html" class="nuevos-link">Ver todo →</a>
+        </div>
+        <div class="nuevos-grid" id="nuevosGrid">
+            <!-- skeleton -->
+            <div class="nuevo-card nuevo-skel">
+                <div class="nuevo-img sk"></div>
+                <div class="nuevo-body">
+                    <div class="sk" style="height:8px;width:50%;margin-bottom:6px;"></div>
+                    <div class="sk" style="height:11px;width:80%;margin-bottom:6px;"></div>
+                    <div class="sk" style="height:13px;width:40%;"></div>
+                </div>
+            </div>
+            <div class="nuevo-card nuevo-skel">
+                <div class="nuevo-img sk"></div>
+                <div class="nuevo-body">
+                    <div class="sk" style="height:8px;width:50%;margin-bottom:6px;"></div>
+                    <div class="sk" style="height:11px;width:80%;margin-bottom:6px;"></div>
+                    <div class="sk" style="height:13px;width:40%;"></div>
+                </div>
+            </div>
+            <div class="nuevo-card nuevo-skel">
+                <div class="nuevo-img sk"></div>
+                <div class="nuevo-body">
+                    <div class="sk" style="height:8px;width:50%;margin-bottom:6px;"></div>
+                    <div class="sk" style="height:11px;width:80%;margin-bottom:6px;"></div>
+                    <div class="sk" style="height:13px;width:40%;"></div>
+                </div>
+            </div>
+            <div class="nuevo-card nuevo-skel">
+                <div class="nuevo-img sk"></div>
+                <div class="nuevo-body">
+                    <div class="sk" style="height:8px;width:50%;margin-bottom:6px;"></div>
+                    <div class="sk" style="height:11px;width:80%;margin-bottom:6px;"></div>
+                    <div class="sk" style="height:13px;width:40%;"></div>
+                </div>
+            </div>
+            <div class="nuevo-card nuevo-skel">
+                <div class="nuevo-img sk"></div>
+                <div class="nuevo-body">
+                    <div class="sk" style="height:8px;width:50%;margin-bottom:6px;"></div>
+                    <div class="sk" style="height:11px;width:80%;margin-bottom:6px;"></div>
+                    <div class="sk" style="height:13px;width:40%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <section class="section" id="ofertas">
         <div class="section-header">
@@ -665,9 +995,6 @@
             <button class="offers-arrow offers-arrow-left" id="offersArrowLeft"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
             <div class="offers-scroll" id="offersScroll"><div class="skel-offer"><div class="skel skel-offer-img"></div><div class="skel-offer-body"><div class="skel skel-line skel-long"></div><div class="skel skel-price" style="margin-top:6px"></div><div class="skel skel-line skel-short" style="margin-top:6px"></div></div></div><div class="skel-offer"><div class="skel skel-offer-img"></div><div class="skel-offer-body"><div class="skel skel-line skel-long"></div><div class="skel skel-price" style="margin-top:6px"></div><div class="skel skel-line skel-short" style="margin-top:6px"></div></div></div><div class="skel-offer"><div class="skel skel-offer-img"></div><div class="skel-offer-body"><div class="skel skel-line skel-long"></div><div class="skel skel-price" style="margin-top:6px"></div><div class="skel skel-line skel-short" style="margin-top:6px"></div></div></div><div class="skel-offer"><div class="skel skel-offer-img"></div><div class="skel-offer-body"><div class="skel skel-line skel-long"></div><div class="skel skel-price" style="margin-top:6px"></div><div class="skel skel-line skel-short" style="margin-top:6px"></div></div></div></div>
             <button class="offers-arrow offers-arrow-right" id="offersArrowRight"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
-        </div>
-        <div style="text-align:center;margin-top:32px">
-            <a href="tienda.html" style="display:inline-block;padding:14px 36px;background:linear-gradient(135deg,var(--blue-700),var(--blue-500));color:white;border-radius:50px;font-weight:700;font-size:0.95rem;text-decoration:none;transition:transform 0.2s">Ver Catálogo Completo</a>
         </div>
     </section>
 
@@ -727,28 +1054,71 @@
     <section class="contact-section" id="contacto">
         <h2>Contactanos</h2>
         <p>Estamos para servirte. Elige el medio de tu preferencia.</p>
-        <div class="contact-grid">
-            <a href="https://wa.me/584243532288" target="_blank" class="contact-card">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
-                </svg>
-                <span>WhatsApp</span>
-            </a>
-            <a href="https://www.instagram.com/lanuevacomercialcesar/" target="_blank" class="contact-card">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-                </svg>
-                <span>Instagram</span>
-            </a>
-            <a href="https://maps.app.goo.gl/KnRfWNHsDSsqPDDL8" target="_blank" class="contact-card">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                    <circle cx="12" cy="10" r="3"/>
-                </svg>
-                <span>Ubicacion</span>
-            </a>
+
+        <div class="contact-row">
+
+            <!-- GRUPO: Contacto -->
+            <div class="contact-group">
+                <span class="contact-group-label">Contacto</span>
+                <div class="contact-group-cards">
+
+                    <!-- WhatsApp -->
+                    <a href="https://wa.me/584243532288" target="_blank" class="contact-card">
+                        <svg class="c-icon" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.524 3.656 1.435 5.168L2 22l4.934-1.41A9.955 9.955 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.95 7.95 0 0 1-4.073-1.117l-.292-.174-3.045.87.899-2.98-.19-.306A7.95 7.95 0 0 1 4 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8zm4.406-5.884c-.241-.12-1.427-.703-1.648-.783-.221-.08-.382-.12-.543.12-.16.24-.623.783-.764.944-.14.16-.281.18-.522.06-.241-.12-1.018-.375-1.939-1.196-.717-.639-1.201-1.428-1.342-1.668-.14-.24-.015-.37.106-.489.108-.107.24-.281.361-.421.12-.14.16-.24.24-.401.08-.16.04-.3-.02-.421-.06-.12-.543-1.308-.744-1.789-.196-.47-.395-.406-.543-.414l-.462-.008c-.16 0-.421.06-.642.3-.22.24-.843.824-.843 2.01 0 1.186.863 2.332.983 2.492.12.16 1.698 2.593 4.115 3.637.575.248 1.024.396 1.374.507.577.184 1.102.158 1.517.096.463-.069 1.427-.583 1.628-1.146.2-.562.2-1.044.14-1.145-.06-.1-.221-.16-.462-.28z"/>
+                        </svg>
+                        <span class="c-name">WhatsApp</span>
+                    </a>
+
+                </div>
+            </div>
+
+            <!-- Separador -->
+            <div class="contact-divider"></div>
+
+            <!-- GRUPO: Redes Sociales -->
+            <div class="contact-group">
+                <span class="contact-group-label">Redes Sociales</span>
+                <div class="contact-group-cards">
+
+                    <!-- Instagram -->
+                    <a href="https://www.instagram.com/lanuevacomercialcesar/" target="_blank" class="contact-card">
+                        <svg class="c-icon" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.334 3.608 1.308.975.975 1.246 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.334 2.633-1.308 3.608-.975.975-2.242 1.246-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.334-3.608-1.308-.975-.975-1.246-2.242-1.308-3.608C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.062-1.366.334-2.633 1.308-3.608.975-.975 2.242-1.246 3.608-1.308C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+                        </svg>
+                        <span class="c-name">Instagram</span>
+                    </a>
+
+                    <!-- TikTok -->
+                    <a href="https://www.tiktok.com/@la.nueva.comercialcesar" target="_blank" class="contact-card">
+                        <svg class="c-icon" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19.321 5.562a5.122 5.122 0 0 1-.443-.258 6.228 6.228 0 0 1-1.137-.966c-.849-.971-1.166-1.959-1.282-2.648h.004C16.368 1.384 16.4 1 16.4 1h-3.559v14.4a2.45 2.45 0 0 1-2.445 2.109 2.45 2.45 0 0 1-2.45-2.45 2.45 2.45 0 0 1 2.45-2.45c.24 0 .471.036.69.1V9.1a6.01 6.01 0 0 0-.69-.04 6.009 6.009 0 0 0-6.009 6.009 6.009 6.009 0 0 0 6.009 6.009 6.009 6.009 0 0 0 6.009-6.009V8.228a9.466 9.466 0 0 0 5.535 1.77V6.45a5.138 5.138 0 0 1-2.619-.888z"/>
+                        </svg>
+                        <span class="c-name">TikTok</span>
+                    </a>
+
+                </div>
+            </div>
+
+            <!-- Separador -->
+            <div class="contact-divider"></div>
+
+            <!-- GRUPO: Ubicación -->
+            <div class="contact-group">
+                <span class="contact-group-label">Ubicación</span>
+                <div class="contact-group-cards">
+
+                    <a href="https://maps.app.goo.gl/KnRfWNHsDSsqPDDL8" target="_blank" class="contact-card">
+                        <svg class="c-icon" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2C8.134 2 5 5.134 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.866-3.134-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/>
+                        </svg>
+                        <span class="c-sub">Visita nuestra<br>tienda física</span>
+                        <span class="c-name">Ubicación</span>
+                    </a>
+
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -778,7 +1148,11 @@
             <div class="footer-col">
                 <h4>Contacto</h4>
                 <a href="https://wa.me/584145610065">WhatsApp</a>
-                <a href="https://www.instagram.com/lanuevacomercialcesar/">Instagram</a>
+            </div>
+            <div class="footer-col">
+                <h4>Redes Sociales</h4>
+                <a href="https://www.instagram.com/lanuevacomercialcesar/" target="_blank">Instagram</a>
+                <a href="https://www.tiktok.com/@la.nueva.comercialcesar" target="_blank">TikTok</a>
             </div>
         </div>
         <div class="footer-bottom">
@@ -791,13 +1165,37 @@
     const supabase = createClient("https://kjaaoryyltemwsknhswm.supabase.co", "sb_publishable_djzazyfgAB5aqRC6J5N9Kg_XDskw04Y");
 
 
-    
+    /* ════ CATEGORÍAS SKELETON ════ */
+    (function() {
+        var bar = document.getElementById('catBar');
+        var skeleton = document.getElementById('catSkeleton');
+        var imgs = bar.querySelectorAll('img');
+        var loaded = 0;
+        function onLoad() {
+            loaded++;
+            if (loaded >= imgs.length) {
+                skeleton.style.display = 'none';
+                bar.style.display = 'flex';
+            }
+        }
+        imgs.forEach(function(img) {
+            if (img.complete) { onLoad(); }
+            else { img.addEventListener('load', onLoad); img.addEventListener('error', onLoad); }
+        });
+        // fallback: mostrar igualmente tras 1.5s
+        setTimeout(function() {
+            skeleton.style.display = 'none';
+            bar.style.display = 'flex';
+        }, 1500);
+    })();
+
+    /* ════ GLOBAL SEARCH INLINE ════ */
     var smInput   = document.getElementById("smInput");
     var smResults = document.getElementById("smResults");
     var smTimer   = null;
     var smCache   = [];
 
-    
+    /* Preload product list silently */
     supabase.from("productos").select("id,name,category,price,image").then(function(r) {
         if (!r.error) smCache = r.data || [];
     });
@@ -853,7 +1251,7 @@
 
             var name = document.createElement("div");
             name.className = "sm-name";
-            
+            /* highlight matching text */
             var ql = q.toLowerCase();
             var nl = p.name.toLowerCase();
             var idx = nl.indexOf(ql);
@@ -906,7 +1304,7 @@
         }, 160);
     });
 
-    
+    /* keyboard navigation in results */
     smInput.addEventListener("keydown", function(e) {
         var rows = Array.from(smResults.querySelectorAll(".sm-result"));
         if (!rows.length) return;
@@ -925,12 +1323,12 @@
         }
     });
 
-    
+    /* ─── PAGE FADE IN ─── */
     requestAnimationFrame(function() {
         requestAnimationFrame(function() { document.body.classList.add("pg-in"); });
     });
 
-    
+    /* ─── PAGE FADE OUT on link click ─── */
     document.addEventListener("click", function(e) {
         var a = e.target.closest("a[href]");
         if (!a) return;
@@ -942,7 +1340,7 @@
         setTimeout(function() { window.location.href = dest; }, 300);
     });
 
-    
+    /* ─── INTERSECTION OBSERVER for .reveal ─── */
     var obs = new IntersectionObserver(function(entries) {
         entries.forEach(function(en) {
             if (!en.isIntersecting) return;
@@ -955,8 +1353,8 @@
     }, { threshold: 0.1 });
     document.querySelectorAll(".reveal").forEach(function(el) { obs.observe(el); });
 
-    
-    supabase.from("banners").select("*").order("order").then(function(resp) {
+    /* ─── CAROUSEL BANNERS ─── */
+    supabase.from("banners").select("*").neq("id", "producto_dia").order("order").then(function(resp) {
         var skel = document.getElementById("bnrSkel");
         var banners = (resp.data || []).filter(function(b) { return b.image; });
         if (!banners.length) {
@@ -1000,7 +1398,7 @@
         setInterval(function() { goTo(current + 1); }, 4000);
     });
 
-    
+    /* ─── OFERTAS: lazy load when section enters viewport ─── */
     var offersLoaded = false;
     function loadOffers() {
         if (offersLoaded) return;
@@ -1021,7 +1419,7 @@
                 var card = document.createElement("div");
                 card.className = "offer-card reveal";
                 
-                
+                /* Sincronización de la imagen mediante búsqueda en smCache */
                 var matchingProd = smCache.find(function(item) { return item.id === p.product_id; });
                 var productImg = (matchingProd && matchingProd.image) ? matchingProd.image : p.image;
 
@@ -1064,7 +1462,7 @@
                 setTimeout(function(el) { return function() { el.style.opacity = "1"; el.style.transform = "translateY(0)"; }; }(card), 80 + i * 100);
             });
 
-            
+            /* Lógica de los temporizadores regresivos */
             function updateTimers() {
                 container.querySelectorAll(".offer-countdown").forEach(function(el) {
                     if (el.classList.contains("expired")) return; 
@@ -1101,13 +1499,94 @@
     }, { rootMargin: "200px" });
     lazyObs.observe(offerSection);
 
-    
+    /* ─── OFFER SCROLL ARROWS ─── */
     document.getElementById("offersArrowLeft").addEventListener("click", function() {
         document.getElementById("offersScroll").scrollBy({ left: -300, behavior: "smooth" });
     });
     document.getElementById("offersArrowRight").addEventListener("click", function() {
         document.getElementById("offersScroll").scrollBy({ left: 300, behavior: "smooth" });
     });
+
+    /* ════ PRODUCTO DEL DÍA ════ */
+    (async function() {
+        try {
+            // 1. Buscar el producto elegido desde admin (guardado en banners con id fijo)
+            const banner = await supabase
+                .from("banners")
+                .select("link")
+                .eq("id", "producto_dia")
+                .maybeSingle();
+
+            var prodId = banner.data ? banner.data.link : null;
+
+            // 2. Si no hay selección manual, ocultar widget
+            if (!prodId) throw new Error("sin seleccion");
+
+            // 3. Cargar el producto por su id
+            const { data: prod, error } = await supabase
+                .from("productos")
+                .select("id, name, category, price, image")
+                .eq("id", prodId)
+                .maybeSingle();
+
+            if (error || !prod) throw new Error();
+
+            const imgEl   = document.getElementById("prodDayImg");
+            const catEl   = document.getElementById("prodDayCat");
+            const nameEl  = document.getElementById("prodDayName");
+            const priceEl = document.getElementById("prodDayPrice");
+            const btnEl   = document.getElementById("prodDayBtn");
+
+            if (prod.image) {
+                const img = document.createElement("img");
+                img.src = prod.image; img.alt = prod.name;
+                imgEl.appendChild(img);
+            } else {
+                imgEl.innerHTML = '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>';
+            }
+
+            catEl.textContent   = (prod.category || "").toUpperCase();
+            nameEl.textContent  = prod.name;
+            priceEl.textContent = "$" + Number(prod.price).toFixed(2);
+            btnEl.href          = "detalle.html?id=" + prod.id;
+
+            document.getElementById("prodDaySkel").style.display  = "none";
+            document.getElementById("prodDayContent").style.display = "block";
+
+        } catch(e) {
+            document.getElementById("prodDayCard").style.display = "none";
+        }
+    })();
+
+    /* ════ NUEVOS INGRESOS ════ */
+    (async function() {
+        try {
+            const { data, error } = await supabase
+                .from("productos")
+                .select("id, name, category, price, image")
+                .order("id", { ascending: false })
+                .limit(5);
+
+            const grid = document.getElementById("nuevosGrid");
+            if (error || !data || !data.length) { grid.style.display = "none"; return; }
+
+            grid.innerHTML = data.map(function(p) {
+                var img = p.image
+                    ? '<img src="' + p.image + '" alt="' + p.name + '" loading="lazy">'
+                    : '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>';
+                return '<a class="nuevo-card" href="detalle.html?id=' + p.id + '">' +
+                    '<div class="nuevo-img">' + img + '</div>' +
+                    '<div class="nuevo-body">' +
+                        '<div class="nuevo-cat">' + (p.category || '') + '</div>' +
+                        '<div class="nuevo-name">' + p.name + '</div>' +
+                        '<div class="nuevo-price">$' + Number(p.price).toFixed(2) + '</div>' +
+                    '</div>' +
+                '</a>';
+            }).join('');
+        } catch(e) {
+            document.getElementById("nuevosGrid").style.display = "none";
+        }
+    })();
 
 </script>
 </body>

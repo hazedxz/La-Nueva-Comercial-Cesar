@@ -31,57 +31,126 @@
 
         nav {
             position: fixed; top: 0; width: 100%; height: 64px; z-index: 1000;
-            background: rgba(255,255,255,0.9);
+            background: rgba(255,255,255,0.95);
             backdrop-filter: blur(16px);
             border-bottom: 1px solid rgba(0,0,0,0.06);
             display: flex; align-items: center; justify-content: center;
         }
         .nav-inner {
-            width: 100%; max-width: 1200px; padding: 0 24px;
-            display: flex; align-items: center; justify-content: space-between;
+            width: 100%; max-width: 960px; padding: 0 24px;
+            display: flex; align-items: center; gap: 16px;
         }
         .nav-logo {
-            display: flex; align-items: center; gap: 12px; text-decoration: none;
+            display: flex; align-items: center; gap: 10px;
+            text-decoration: none; flex-shrink: 0;
         }
-        .nav-logo-icon {
-            width: 40px; height: 40px;
-            background: linear-gradient(135deg, var(--blue-700), var(--blue-500));
-            border-radius: 10px; display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0;
-        }
-        .nav-logo-icon svg { width: 22px; height: 22px; stroke: white; fill: none; stroke-width: 2; }
-        .nav-logo-text {
-            display: flex; flex-direction: column; line-height: 1.15;
-        }
+        .nav-logo svg { display: block; }
+        .nav-logo-text { display: flex; flex-direction: column; line-height: 1.15; }
         .nav-logo-sub {
-            font-size: 9px; font-weight: 500; text-transform: uppercase;
-            letter-spacing: 0.3px; color: var(--text-muted);
+            font-size: 8px; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 1px; color: var(--text-muted);
         }
         .nav-logo-main {
-            font-size: 18px; font-weight: 800;
-            background: linear-gradient(135deg, var(--blue-800), var(--blue-500));
+            font-size: 16px; font-weight: 800; letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
         }
-        .nav-links { display: flex; gap: 28px; list-style: none; }
-        .nav-links a {
-            text-decoration: none; font-size: 13px; font-weight: 500;
-            color: var(--text-muted); transition: color 0.2s;
+        @media (max-width: 480px) { .nav-logo-text { display: none; } }
+
+        /* Barra de búsqueda inline */
+        .nav-search-wrap {
+            flex: 1; display: flex; align-items: center;
+            background: white; border: 1.5px solid #e2e8f0;
+            border-radius: 50px; overflow: visible;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            position: relative;
         }
-        .nav-links a:hover { color: var(--blue-700); }
-        .nav-links a.active { color: var(--blue-700); border-bottom: 2px solid var(--blue-500); padding-bottom: 2px; }
-        .nav-icons { display: flex; gap: 14px; align-items: center; }
-        .nav-icons svg { width: 20px; height: 20px; stroke: var(--text-muted); fill: none; stroke-width: 1.8; cursor: pointer; transition: stroke 0.2s; }
-        .nav-icons svg:hover { stroke: var(--blue-700); }
+        .nav-search-wrap:focus-within {
+            border-color: var(--blue-500);
+            box-shadow: 0 0 0 3px rgba(96,165,250,0.15);
+        }
+        .nav-search-category {
+            display: flex; align-items: center; gap: 6px;
+            padding: 0 14px; border-right: 1.5px solid #e2e8f0;
+            height: 40px; cursor: pointer; background: none; border-top: none; border-bottom: none; border-left: none;
+            font-size: 0.82rem; font-weight: 600; color: var(--text-body);
+            white-space: nowrap; flex-shrink: 0;
+        }
+        .nav-search-category svg { width: 12px; height: 12px; stroke: var(--text-muted); fill: none; stroke-width: 2.5; }
+        #smInput {
+            flex: 1; border: none; outline: none; background: transparent;
+            font-size: 0.92rem; font-family: inherit;
+            color: var(--text-body); padding: 0 14px;
+            caret-color: var(--blue-600); min-width: 0;
+        }
+        #smInput::placeholder { color: #94a3b8; }
+        .nav-search-btn {
+            width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+            background: var(--blue-600); border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0; transition: background 0.2s;
+        }
+        .nav-search-btn:hover { background: var(--blue-700); }
+        .nav-search-btn svg { width: 17px; height: 17px; stroke: white; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+        /* Resultados debajo de la barra */
+        .search-modal-results {
+            position: absolute; top: calc(100% + 8px); left: 0; right: 0;
+            background: white; border-radius: 14px; overflow: hidden;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.14);
+            border: 1px solid #e2e8f0;
+            display: none; max-height: 380px; overflow-y: auto; z-index: 9999;
+        }
+        .search-modal-results.show { display: block; }
+        .sm-result {
+            display: flex; align-items: center; gap: 13px;
+            padding: 12px 18px; cursor: pointer;
+            border-bottom: 1px solid #f8fafc;
+            opacity: 0; animation: smFadeIn 0.18s ease forwards;
+            transition: background 0.1s;
+        }
+        @keyframes smFadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .sm-result:nth-child(1) { animation-delay: 0.00s; }
+        .sm-result:nth-child(2) { animation-delay: 0.04s; }
+        .sm-result:nth-child(3) { animation-delay: 0.08s; }
+        .sm-result:nth-child(4) { animation-delay: 0.12s; }
+        .sm-result:nth-child(5) { animation-delay: 0.16s; }
+        .sm-result:nth-child(6) { animation-delay: 0.20s; }
+        .sm-result:nth-child(7) { animation-delay: 0.24s; }
+        .sm-result:last-child { border-bottom: none; }
+        .sm-result:hover, .sm-result:focus { background: #eff6ff; outline: none; }
+        .sm-thumb {
+            width: 46px; height: 46px; border-radius: 9px;
+            flex-shrink: 0; overflow: hidden; background: #eff6ff;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .sm-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .sm-thumb svg { width: 20px; height: 20px; stroke: #93c5fd; fill: none; stroke-width: 1.5; }
+        .sm-info { flex: 1; min-width: 0; }
+        .sm-name {
+            font-size: .88rem; font-weight: 600; color: #0f172a;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .sm-cat { font-size: .73rem; color: #64748b; margin-top: 2px; text-transform: capitalize; }
+        .sm-price { font-size: .92rem; font-weight: 700; color: #2563eb; flex-shrink: 0; }
+        .sm-empty { padding: 30px 20px; text-align: center; color: #64748b; font-size: .9rem; }
+        .sm-empty strong { color: #0f172a; }
+        .sm-hint {
+            padding: 10px 18px; font-size: .73rem; color: #94a3b8;
+            border-top: 1px solid #f1f5f9; display: flex; gap: 16px;
+        }
+        .sm-hint span { display: flex; align-items: center; gap: 4px; }
 
         @media (max-width: 768px) {
             nav { height: 56px; }
-            .nav-links { display: none; }
-            .nav-inner { padding: 0 16px; }
-            .nav-logo-main { font-size: 15px; }
-            .nav-logo-icon { width: 34px; height: 34px; }
-            .nav-logo-icon svg { width: 18px; height: 18px; }
-            .nav-logo-sub { font-size: 7px; }
+            .nav-inner { padding: 0 12px; }
+            .nav-search-category { display: none; }
+        }
+        @media (max-width: 480px) {
+            .nav-inner { padding: 0 10px; }
         }
 
         .page-header {
@@ -123,7 +192,7 @@
             gap: 20px;
         }
 
-        
+        /* ===== NUEVOS ESTILOS DE TARJETAS (ESTILO OFERTA/CUADRADOS) ===== */
         .product-card {
             background: #ffffff;
             border-radius: 8px;
@@ -222,7 +291,7 @@
         }
         
         .product-price-container .new-price {
-            color: #dc2626; 
+            color: #dc2626; /* Color rojo solo si es precio de oferta */
         }
 
         .offer-countdown {
@@ -277,11 +346,11 @@
             .footer-inner { grid-template-columns: 1fr; gap: 24px; }
         }
 
-        
+        /* ─── PAGE TRANSITION ─── */
         body { opacity: 0; transition: opacity 0.32s ease; }
         body.pg-in { opacity: 1; }
 
-        
+        /* ─── SHIMMER SKELETON ─── */
         @keyframes shimmer {
             0%   { background-position: -600px 0; }
             100% { background-position:  600px 0; }
@@ -310,7 +379,7 @@
         .skel-price{ height:16px; width:42%; margin-top:auto; border-radius:5px; }
         @media (max-width: 700px) { .skel-img { height: 160px; } }
 
-        
+        /* ─── REVEAL ON SCROLL ─── */
         .product-card {
             opacity: 0;
             transform: translateY(22px);
@@ -318,7 +387,7 @@
                         box-shadow 0.3s, transform 0.3s;
         }
 
-        
+        /* ════ SEARCH MODAL ════ */
         .search-modal-overlay {
             position: fixed; inset: 0; z-index: 9999;
             background: rgba(10,15,30,0.72);
@@ -424,49 +493,37 @@
     <nav>
         <div class="nav-inner">
             <a href="index.html" class="nav-logo">
-                <div class="nav-logo-icon">
-                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="2" y="2" width="20" height="20" rx="2.5"/>
-                        <line x1="2" y1="8" x2="22" y2="8"/>
-                        <rect x="17" y="3.5" width="2.5" height="3" rx="0.5"/>
-                        <rect x="17" y="10" width="2.5" height="7" rx="0.5"/>
-                    </svg>
-                </div>
+                <svg width="36" height="36" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="40" height="40" rx="10" fill="#1d4ed8"/>
+                    <rect x="7" y="9" width="11" height="20" rx="1.5" stroke="white" stroke-width="1.8"/>
+                    <line x1="7" y1="18" x2="18" y2="18" stroke="white" stroke-width="1.2" opacity="0.6"/>
+                    <line x1="10" y1="13" x2="10" y2="16" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+                    <line x1="10" y1="21" x2="10" y2="25" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+                    <rect x="21" y="9" width="13" height="9" rx="1.5" stroke="white" stroke-width="1.8"/>
+                    <rect x="23" y="11" width="9" height="5" rx="0.5" fill="white" fill-opacity="0.25"/>
+                    <line x1="26" y1="18" x2="28" y2="18" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+                    <rect x="21" y="21" width="13" height="9" rx="1.5" stroke="white" stroke-width="1.8"/>
+                    <circle cx="27" cy="25" r="3" stroke="white" stroke-width="1.5"/>
+                    <circle cx="27" cy="25" r="1" fill="white" opacity="0.7"/>
+                </svg>
                 <div class="nav-logo-text">
                     <span class="nav-logo-sub">La Nueva Comercial</span>
                     <span class="nav-logo-main">CESAR</span>
                 </div>
             </a>
-            <ul class="nav-links">
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="index.html#categorias">Categorias</a></li>
-                <li><a href="tienda.html" class="active">Tienda</a></li>
-                <li><a href="index.html#nosotros">Nosotros</a></li>
-                <li><a href="index.html#contacto">Contacto</a></li>
-            </ul>
-            <div class="nav-icons">
-                <button class="nav-search-btn" id="smToggle" aria-label="Buscar productos">
+            <div class="nav-search-wrap">
+                <button class="nav-search-category" type="button">
+                    Categorías
+                    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <input type="text" id="smInput" placeholder="Busca aquí tu producto" autocomplete="off" spellcheck="false">
+                <button class="nav-search-btn" type="button" aria-label="Buscar">
                     <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
                 </button>
-                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="9" cy="21" r="1"/>
-                    <circle cx="20" cy="21" r="1"/>
-                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-                </svg>
+                <div class="search-modal-results" id="smResults"></div>
             </div>
         </div>
     </nav>
-
-    <div class="search-modal-overlay" id="smOverlay" role="dialog" aria-modal="true" aria-label="Buscar productos">
-        <div class="search-modal-box">
-            <div class="search-modal-input-wrap">
-                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-                <input type="text" id="smInput" placeholder="Buscar productos, categorías..." autocomplete="off" spellcheck="false">
-                <span class="search-modal-kbd">Esc</span>
-            </div>
-            <div class="search-modal-results" id="smResults"></div>
-        </div>
-    </div>
 
     <div class="page-header">
         <h1>Nuestro <span>Cat&aacute;logo</span></h1>
@@ -522,27 +579,16 @@
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
     const supabase = createClient("https://kjaaoryyltemwsknhswm.supabase.co", "sb_publishable_djzazyfgAB5aqRC6J5N9Kg_XDskw04Y");
 
-    
-    var smOverlay = document.getElementById("smOverlay");
+    /* ════ GLOBAL SEARCH INLINE ════ */
     var smInput   = document.getElementById("smInput");
     var smResults = document.getElementById("smResults");
-    var smToggle  = document.getElementById("smToggle");
     var smTimer   = null;
     var smCache   = [];
 
-    function smOpen() {
-        smOverlay.classList.add("open");
-        document.body.style.overflow = "hidden";
-        setTimeout(function() { smInput.focus(); }, 60);
-    }
     function smClose() {
-        smOverlay.classList.remove("open");
-        document.body.style.overflow = "";
-        setTimeout(function() {
-            smResults.classList.remove("show");
-            smResults.innerHTML = "";
-            smInput.value = "";
-        }, 250);
+        smResults.classList.remove("show");
+        smResults.innerHTML = "";
+        smInput.value = "";
     }
     function smGoTo(id) {
         smClose();
@@ -551,12 +597,11 @@
     }
     window.smGoTo = smGoTo;
 
-    smToggle.addEventListener("click", smOpen);
-    smOverlay.addEventListener("click", function(e) {
-        if (e.target === smOverlay) smClose();
-    });
     document.addEventListener("keydown", function(e) {
         if (e.key === "Escape") smClose();
+    });
+    document.addEventListener("click", function(e) {
+        if (!e.target.closest(".nav-search-wrap")) smClose();
     });
 
     function smRenderResults(list, q) {
@@ -592,7 +637,7 @@
 
             var name = document.createElement("div");
             name.className = "sm-name";
-            
+            /* highlight matching text */
             var ql = q.toLowerCase();
             var nl = p.name.toLowerCase();
             var idx = nl.indexOf(ql);
@@ -620,7 +665,7 @@
             smResults.appendChild(row);
         });
 
-        
+        /* hint bar */
         var hint = document.createElement("div");
         hint.className = "sm-hint";
         hint.innerHTML = "<span>↑↓ navegar</span><span>⏎ abrir</span><span>Esc cerrar</span>";
@@ -645,7 +690,7 @@
         }, 160);
     });
 
-    
+    /* keyboard navigation in results */
     smInput.addEventListener("keydown", function(e) {
         var rows = Array.from(smResults.querySelectorAll(".sm-result"));
         if (!rows.length) return;
@@ -664,12 +709,12 @@
         }
     });
 
-    
+    /* ─── PAGE FADE IN ─── */
     requestAnimationFrame(function() {
         requestAnimationFrame(function() { document.body.classList.add("pg-in"); });
     });
 
-    
+    /* ─── PAGE FADE OUT on navigation ─── */
     document.addEventListener("click", function(e) {
         var a = e.target.closest("a[href]");
         if (!a) return;
@@ -681,7 +726,7 @@
         setTimeout(function() { window.location.href = dest; }, 300);
     });
 
-    
+    /* ─── INTERSECTION OBSERVER for stagger ─── */
     var cardObs = new IntersectionObserver(function(entries) {
         entries.forEach(function(en) {
             if (!en.isIntersecting) return;
@@ -690,7 +735,7 @@
         });
     }, { threshold: 0.08, rootMargin: "0px 0px -40px 0px" });
 
-    
+    /* ─── SKELETON HELPERS ─── */
     function makeSkelCard() {
         return "<div class=\"skel-card\">"
             + "<div class=\"skel skel-img\"></div>"
@@ -703,15 +748,15 @@
 
     var grid = document.getElementById("productGrid");
 
-    
+    /* Show 8 skeleton cards while loading */
     var skelHTML = "";
     for (var s = 0; s < 8; s++) skelHTML += makeSkelCard();
     grid.innerHTML = skelHTML;
 
-    
+    /* ─── CURRENT FILTER ─── */
     var currentFilter = "all";
 
-    
+    /* ─── RENDER PRODUCTS ─── */
     let globalOffers = {};
 
     function renderProducts(list) {
@@ -772,7 +817,7 @@
                     "</div>" +
                 "</div>";
 
-            
+            /* Card click → detalle with fade out */
             var slug = p.id;
             card.addEventListener("click", function() {
                 document.body.classList.remove("pg-in");
@@ -784,7 +829,7 @@
         grid.appendChild(fragment);
         attachFilters();
 
-        
+        /* Lógica de los temporizadores regresivos */
         function updateTimers() {
             grid.querySelectorAll(".offer-countdown").forEach(function(el) {
                 if (el.classList.contains("expired")) return; 
@@ -822,7 +867,7 @@
         window.shopTimerInterval = setInterval(updateTimers, 1000);
     }
 
-    
+    /* ─── FILTER BUTTONS ─── */
     function attachFilters() {
         var buttons = document.querySelectorAll(".filter-btn");
         buttons.forEach(function(btn) {
@@ -837,7 +882,7 @@
         });
     }
 
-   
+    /* ─── LOAD FROM SUPABASE (OFERTAS LUEGO PRODUCTOS) ─── */
     supabase.from("ofertas").select("*").then(function(offerResp) {
         if (!offerResp.error && offerResp.data) {
             var now = new Date().getTime();
@@ -849,7 +894,7 @@
         return supabase.from("productos").select("id,name,category,price,image");
     }).then(function(resp) {
         if (resp && resp.error) { console.error(resp.error); renderProducts([]); return; }
-        
+        // Actualizamos cache de busqueda para asegurar q coincida
         smCache = (resp && resp.data) ? resp.data : [];
         renderProducts(smCache);
     });
